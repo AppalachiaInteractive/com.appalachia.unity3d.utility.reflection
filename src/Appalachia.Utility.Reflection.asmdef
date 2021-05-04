@@ -1,0 +1,14 @@
+{
+	"name": "Appalachia.Utility.Reflection",
+    "rootNamespace": "Appalachia.Utility.Reflection",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
