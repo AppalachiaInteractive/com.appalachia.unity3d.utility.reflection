@@ -12,8 +12,8 @@ namespace Appalachia.Utility.Reflection.Extensions
     {
         private const string PrfPfx = nameof(ObjectInvokeExtensions) + ".";
 
-        private const BindingFlags NonpublicInstance = BindingFlags.NonPublic | BindingFlags.Instance;
-        private const BindingFlags NonpublicStatic = BindingFlags.NonPublic | BindingFlags.Static;
+        private const BindingFlags NonPublicAndInstance = BindingFlags.NonPublic | BindingFlags.Instance;
+        private const BindingFlags NonPublicAndStatic = BindingFlags.NonPublic | BindingFlags.Static;
 
         private static readonly Type[] Xt = new Type[0];
         private static readonly Type[] _0t = new Type[1];
@@ -56,7 +56,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 var method = ReflectionCache.GetBestMethod(methods, null, Xt);
                 method.Invoke(o, Xv);
@@ -67,7 +67,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _0v[0] = arg0;
                 _0t[0] = typeof(T0);
@@ -84,7 +84,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _1v[0] = arg0;
                 _1t[0] = typeof(T0);
@@ -105,7 +105,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _2v[0] = arg0;
                 _2t[0] = typeof(T0);
@@ -134,7 +134,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _3v[0] = arg0;
                 _3t[0] = typeof(T0);
@@ -169,7 +169,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _4v[0] = arg0;
                 _4t[0] = typeof(T0);
@@ -209,7 +209,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _5v[0] = arg0;
                 _5t[0] = typeof(T0);
@@ -254,7 +254,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _6v[0] = arg0;
                 _6t[0] = typeof(T0);
@@ -304,7 +304,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _7v[0] = arg0;
                 _7t[0] = typeof(T0);
@@ -359,7 +359,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _8v[0] = arg0;
                 _8t[0] = typeof(T0);
@@ -419,7 +419,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _9v[0] = arg0;
                 _9t[0] = typeof(T0);
@@ -471,7 +471,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 MethodInfo bestMethod;
                 object result;
@@ -500,7 +500,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _0v[0] = arg0;
                 _0t[0] = typeof(T0);
@@ -535,7 +535,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _1v[0] = arg0;
                 _1t[0] = typeof(T0);
@@ -574,7 +574,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _2v[0] = arg0;
                 _2t[0] = typeof(T0);
@@ -605,7 +605,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _3v[0] = arg0;
                 _3t[0] = typeof(T0);
@@ -642,7 +642,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _4v[0] = arg0;
                 _4t[0] = typeof(T0);
@@ -684,7 +684,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _5v[0] = arg0;
                 _5t[0] = typeof(T0);
@@ -731,7 +731,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _6v[0] = arg0;
                 _6t[0] = typeof(T0);
@@ -783,7 +783,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _7v[0] = arg0;
                 _7t[0] = typeof(T0);
@@ -840,7 +840,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _8v[0] = arg0;
                 _8t[0] = typeof(T0);
@@ -902,7 +902,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonpublicInstance, out var methods);
+                ReflectionCache.PrepareMethodInfo(o.GetType(), methodName, NonPublicAndInstance, out var methods);
 
                 _9v[0] = arg0;
                 _9t[0] = typeof(T0);
@@ -956,7 +956,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 var method = ReflectionCache.GetBestMethod(methods, null, Xt).Invoke(t, Xv);
             }
@@ -966,7 +966,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _0v[0] = arg0;
                 _0t[0] = typeof(T0);
@@ -982,7 +982,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _1v[0] = arg0;
                 _1t[0] = typeof(T0);
@@ -1003,7 +1003,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _2v[0] = arg0;
                 _2t[0] = typeof(T0);
@@ -1032,7 +1032,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _3v[0] = arg0;
                 _3t[0] = typeof(T0);
@@ -1067,7 +1067,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _4v[0] = arg0;
                 _4t[0] = typeof(T0);
@@ -1107,7 +1107,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _5v[0] = arg0;
                 _5t[0] = typeof(T0);
@@ -1152,7 +1152,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _6v[0] = arg0;
                 _6t[0] = typeof(T0);
@@ -1202,7 +1202,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _7v[0] = arg0;
                 _7t[0] = typeof(T0);
@@ -1257,7 +1257,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _8v[0] = arg0;
                 _8t[0] = typeof(T0);
@@ -1317,7 +1317,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvoke.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _9v[0] = arg0;
                 _9t[0] = typeof(T0);
@@ -1369,7 +1369,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
                 return (TR) ReflectionCache.GetBestMethod(methods, typeof(TR), Xt).Invoke(t, Xv);
             }
         }
@@ -1378,7 +1378,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _0v[0] = arg0;
                 _0t[0] = typeof(T0);
@@ -1396,7 +1396,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _1v[0] = arg0;
                 _1t[0] = typeof(T0);
@@ -1418,7 +1418,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _2v[0] = arg0;
                 _2t[0] = typeof(T0);
@@ -1449,7 +1449,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _3v[0] = arg0;
                 _3t[0] = typeof(T0);
@@ -1486,7 +1486,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _4v[0] = arg0;
                 _4t[0] = typeof(T0);
@@ -1528,7 +1528,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _5v[0] = arg0;
                 _5t[0] = typeof(T0);
@@ -1575,7 +1575,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _6v[0] = arg0;
                 _6t[0] = typeof(T0);
@@ -1627,7 +1627,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _7v[0] = arg0;
                 _7t[0] = typeof(T0);
@@ -1684,7 +1684,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _8v[0] = arg0;
                 _8t[0] = typeof(T0);
@@ -1746,7 +1746,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             using (PrfInvokeReturn.Auto())
             {
-                ReflectionCache.PrepareMethodInfo(t, methodName, NonpublicStatic, out var methods);
+                ReflectionCache.PrepareMethodInfo(t, methodName, NonPublicAndStatic, out var methods);
 
                 _9v[0] = arg0;
                 _9t[0] = typeof(T0);

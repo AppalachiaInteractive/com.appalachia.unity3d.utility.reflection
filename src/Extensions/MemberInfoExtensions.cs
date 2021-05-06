@@ -7,6 +7,53 @@ namespace Appalachia.Utility.Reflection.Extensions
 {
     public static class MemberInfoExtensions
     {
+        
+        public static IEnumerable<T> GetTypeMembersMatchingType<T>(this Type type, BindingFlags flags = BindingFlags.Default)
+            where T : MemberInfo
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (type == typeof(object))
+            {
+                yield break;
+            }
+
+            var currentType = type;
+            MemberInfo[] memberInfoArray;
+            int index;
+            if ((flags & BindingFlags.DeclaredOnly) == BindingFlags.DeclaredOnly)
+            {
+                memberInfoArray = currentType.GetMembers(flags);
+                for (index = 0; index < memberInfoArray.Length; ++index)
+                {
+                    if (memberInfoArray[index] is T obj)
+                    {
+                        yield return obj;
+                    }
+                }
+            }
+            else
+            {
+                flags |= BindingFlags.DeclaredOnly;
+                do
+                {
+                    memberInfoArray = currentType.GetMembers(flags);
+                    for (index = 0; index < memberInfoArray.Length; ++index)
+                    {
+                        if (memberInfoArray[index] is T obj)
+                        {
+                            yield return obj;
+                        }
+                    }
+
+                    currentType = currentType.BaseType;
+                } while (currentType != null);
+            }
+        }
+        
         public static Type GetReturnType(this MemberInfo memberInfo)
         {
             return memberInfo switch
@@ -52,7 +99,7 @@ namespace Appalachia.Utility.Reflection.Extensions
             }
         }
 
-        public static IEnumerable<MemberInfo> GetAllMembers(this Type type, BindingFlags flags = BindingFlags.Default)
+        public static IEnumerable<MemberInfo> GetAllTypeMembers(this Type type, BindingFlags flags = BindingFlags.Default)
         {
             var currentType = type;
             MemberInfo[] memberInfoArray;
@@ -81,12 +128,25 @@ namespace Appalachia.Utility.Reflection.Extensions
             }
         }
 
-        public static IEnumerable<MemberInfo> GetAllMembers(
+        public static IEnumerable<MemberInfo> GetTypeMembersByName(
             this Type type,
             string name,
             BindingFlags flags = BindingFlags.Default)
         {
-            return type.GetAllMembers(flags).Where(allMember => allMember.Name == name);
+            return type.GetAllTypeMembers(flags).Where(member => member.Name == name);
+        }
+
+        public static IEnumerable<MemberInfo> GetTypeMembersByMemberType(this Type type,
+                                                                     BindingFlags flags = BindingFlags.Default,
+                                                                     params MemberTypes[] memberTypes)
+        {
+            return type.GetAllTypeMembers(flags).Where(member => memberTypes.Contains(member.MemberType));
+        }
+
+        public static IEnumerable<MemberInfo> GetFieldsAndProperties(this Type type,
+                                                                     BindingFlags flags = BindingFlags.Default)
+        {
+            return GetTypeMembersByMemberType(type, flags, MemberTypes.Property, MemberTypes.Field);
         }
     }
 }

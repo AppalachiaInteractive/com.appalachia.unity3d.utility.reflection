@@ -326,7 +326,7 @@ namespace Appalachia.Utility.Reflection.Extensions
                 {
                     if (!index1.IsClass && !index1.IsInterface && !index1.IsValueType)
                     {
-                        throw new Exception($"Unknown parameter constraint type! {index1.GetPrintableName()}");
+                        throw new Exception($"Unknown parameter constraint type! {index1.ReadableName()}");
                     }
 
                     if (index1.IsGenericType)
@@ -403,7 +403,7 @@ namespace Appalachia.Utility.Reflection.Extensions
 
             if (!type.IsGenericTypeDefinition)
             {
-                throw new ArgumentException($"Type '{type.GetPrintableName()}' is not a generic type definition!");
+                throw new ArgumentException($"Type '{type.ReadableName()}' is not a generic type definition!");
             }
 
             var genericArguments = type.GetGenericArguments();
@@ -425,7 +425,7 @@ namespace Appalachia.Utility.Reflection.Extensions
 
             if (!type.IsGenericParameter)
             {
-                throw new ArgumentException($"Type '{type.GetPrintableName()}' is not a generic parameter!");
+                throw new ArgumentException($"Type '{type.ReadableName()}' is not a generic parameter!");
             }
 
             var stringBuilder = new StringBuilder();
@@ -469,11 +469,11 @@ namespace Appalachia.Utility.Reflection.Extensions
                         stringBuilder.Append(", ");
                         if (useFullTypeNames)
                         {
-                            stringBuilder.Append(type1.GetNiceFullName());
+                            stringBuilder.Append(type1.GetReadableFullName());
                         }
                         else
                         {
-                            stringBuilder.Append(type1.GetPrintableName());
+                            stringBuilder.Append(type1.ReadableName());
                         }
                     }
                     else
@@ -481,11 +481,11 @@ namespace Appalachia.Utility.Reflection.Extensions
                         stringBuilder.Append("where ").Append(type.Name).Append(" : ");
                         if (useFullTypeNames)
                         {
-                            stringBuilder.Append(type1.GetNiceFullName());
+                            stringBuilder.Append(type1.GetReadableFullName());
                         }
                         else
                         {
-                            stringBuilder.Append(type1.GetPrintableName());
+                            stringBuilder.Append(type1.ReadableName());
                         }
 
                         flag = true;

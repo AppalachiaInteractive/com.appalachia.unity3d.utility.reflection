@@ -6,8 +6,8 @@ namespace Appalachia.Utility.Reflection.Extensions
 {
     public static class TypeNameExtensions
     {
-        private static readonly object CachedNiceNamesLock = new object();
-        private static readonly Dictionary<Type, string> CachedNiceNames = new Dictionary<Type, string>();
+        private static readonly object ReadableNamesCacheLock = new object();
+        private static readonly Dictionary<Type, string> ReadableNamesCache = new Dictionary<Type, string>();
 
         private static readonly Dictionary<string, string> TypeNameKeywordAlternatives = new Dictionary<string, string>
         {
@@ -41,21 +41,21 @@ namespace Appalachia.Utility.Reflection.Extensions
             {"Boolean[]", "bool[]"}
         };
 
-        public static string GetPrintableName(this Type type)
+        public static string ReadableName(this Type type)
         {
             return type.IsNested && !type.IsGenericParameter
-                ? $"{type.DeclaringType.GetPrintableName()}.{GetCachedNiceName(type)}"
-                : GetCachedNiceName(type);
+                ? $"{type.DeclaringType.ReadableName()}.{GetCachedReadableName(type)}"
+                : GetCachedReadableName(type);
         }
 
-        public static string GetNiceFullName(this Type type)
+        public static string GetReadableFullName(this Type type)
         {
             if (type.IsNested && !type.IsGenericParameter)
             {
-                return $"{GetNiceFullName(type.DeclaringType)}.{GetCachedNiceName(type)}";
+                return $"{GetReadableFullName(type.DeclaringType)}.{GetCachedReadableName(type)}";
             }
 
-            var str = GetCachedNiceName(type);
+            var str = GetCachedReadableName(type);
             if (type.Namespace != null)
             {
                 str = $"{type.Namespace}.{str}";
@@ -64,32 +64,32 @@ namespace Appalachia.Utility.Reflection.Extensions
             return str;
         }
 
-        public static string GetSafeName(this Type type)
+        public static string GetSimpleReadableName(this Type type)
         {
-            return type.GetPrintableName().Replace('<', '_').Replace('>', '_').TrimEnd('_');
+            return type.ReadableName().Replace('<', '_').Replace('>', '_').TrimEnd('_');
         }
 
-        public static string GetSafeFullName(this Type type)
+        public static string GetSimpleReadableFullName(this Type type)
         {
-            return type.GetNiceFullName().Replace('<', '_').Replace('>', '_').TrimEnd('_');
+            return type.GetReadableFullName().Replace('<', '_').Replace('>', '_').TrimEnd('_');
         }
 
-        private static string CreateNiceName(Type type)
+        private static string CalculateReadableName(Type type)
         {
             if (type.IsArray)
             {
                 var arrayRank = type.GetArrayRank();
-                return type.GetElementType().GetPrintableName() + (arrayRank == 1 ? "[]" : "[,]");
+                return type.GetElementType().ReadableName() + (arrayRank == 1 ? "[]" : "[,]");
             }
 
             if (type.InheritsFrom(typeof(Nullable<>)))
             {
-                return $"{CreateNiceName(type.GetGenericArguments()[0])}?";
+                return $"{CalculateReadableName(type.GetGenericArguments()[0])}?";
             }
 
             if (type.IsByRef)
             {
-                return $"ref {CreateNiceName(type.GetElementType())}";
+                return $"ref {CalculateReadableName(type.GetElementType())}";
             }
 
             if (type.IsGenericParameter || !type.IsGenericType)
@@ -112,7 +112,7 @@ namespace Appalachia.Utility.Reflection.Extensions
                     stringBuilder.Append(", ");
                 }
 
-                stringBuilder.Append(type1.GetPrintableName());
+                stringBuilder.Append(type1.ReadableName());
             }
 
             stringBuilder.Append('>');
@@ -131,21 +131,21 @@ namespace Appalachia.Utility.Reflection.Extensions
             return key;
         }
 
-        private static string GetCachedNiceName(Type type)
+        private static string GetCachedReadableName(Type type)
         {
-            string niceName;
-            lock (CachedNiceNamesLock)
+            string readableName;
+            lock (ReadableNamesCacheLock)
             {
-                if (CachedNiceNames.TryGetValue(type, out niceName))
+                if (ReadableNamesCache.TryGetValue(type, out readableName))
                 {
-                    return niceName;
+                    return readableName;
                 }
 
-                niceName = CreateNiceName(type);
-                CachedNiceNames.Add(type, niceName);
+                readableName = CalculateReadableName(type);
+                ReadableNamesCache.Add(type, readableName);
             }
 
-            return niceName;
+            return readableName;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Appalachia.Utility.Reflection.Extensions
     {
         private static Dictionary<MethodBase, string> _cache;
 
-        public static string GetPrintableName(this MethodBase method, string extensionMethodPrefix)
+        public static string ReadableName(this MethodBase method, string extensionMethodPrefix)
         {
             if (_cache == null)
             {
@@ -45,7 +45,7 @@ namespace Appalachia.Utility.Reflection.Extensions
                         stringBuilder.Append(", ");
                     }
 
-                    stringBuilder.Append(genericArguments[index].GetPrintableName());
+                    stringBuilder.Append(genericArguments[index].ReadableName());
                 }
 
                 stringBuilder.Append(">");
@@ -71,7 +71,7 @@ namespace Appalachia.Utility.Reflection.Extensions
             for (var length = parameterInfoArray.Length; index < length; ++index)
             {
                 var parameterInfo = parameterInfoArray[index];
-                var niceName = parameterInfo.ParameterType.GetPrintableName();
+                var niceName = parameterInfo.ParameterType.ReadableName();
                 stringBuilder.Append(niceName);
                 stringBuilder.Append(" ");
                 stringBuilder.Append(parameterInfo.Name);
@@ -84,9 +84,9 @@ namespace Appalachia.Utility.Reflection.Extensions
             return stringBuilder.ToString();
         }
 
-        public static string GetPrintableName(this MethodBase method)
+        public static string GetReadableName(this MethodBase method)
         {
-            return method.GetPrintableName("[ext] ");
+            return method.ReadableName("[ext] ");
         }
 
         public static bool IsExtensionMethod(this MethodBase method)

@@ -255,7 +255,7 @@ namespace Appalachia.Utility.Reflection.Extensions
 
         public static MethodInfo GetCastMethod(this Type from, Type to, bool requireImplicitCast = false)
         {
-            foreach (var allMember in from.GetAllMembers<MethodInfo>(BindingFlags.Static | BindingFlags.Public))
+            foreach (var allMember in from.GetTypeMembersMatchingType<MethodInfo>(BindingFlags.Static | BindingFlags.Public))
             {
                 if (((allMember.Name == "op_Implicit") ||
                      (!requireImplicitCast && (allMember.Name == "op_Explicit"))) &&
@@ -265,7 +265,7 @@ namespace Appalachia.Utility.Reflection.Extensions
                 }
             }
 
-            return to.GetAllMembers<MethodInfo>(BindingFlags.Static | BindingFlags.Public)
+            return to.GetTypeMembersMatchingType<MethodInfo>(BindingFlags.Static | BindingFlags.Public)
                      .FirstOrDefault(
                           allMember =>
                               ((allMember.Name == "op_Implicit") ||

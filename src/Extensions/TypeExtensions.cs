@@ -1,7 +1,6 @@
 #region
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
@@ -11,51 +10,6 @@ namespace Appalachia.Utility.Reflection.Extensions
 {
     public static class TypeExtensions
     {
-        public static IEnumerable<T> GetAllMembers<T>(this Type type, BindingFlags flags = BindingFlags.Default)
-            where T : MemberInfo
-        {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-
-            if (type == typeof(object))
-            {
-                yield break;
-            }
-
-            var currentType = type;
-            MemberInfo[] memberInfoArray;
-            int index;
-            if ((flags & BindingFlags.DeclaredOnly) == BindingFlags.DeclaredOnly)
-            {
-                memberInfoArray = currentType.GetMembers(flags);
-                for (index = 0; index < memberInfoArray.Length; ++index)
-                {
-                    if (memberInfoArray[index] is T obj)
-                    {
-                        yield return obj;
-                    }
-                }
-            }
-            else
-            {
-                flags |= BindingFlags.DeclaredOnly;
-                do
-                {
-                    memberInfoArray = currentType.GetMembers(flags);
-                    for (index = 0; index < memberInfoArray.Length; ++index)
-                    {
-                        if (memberInfoArray[index] is T obj)
-                        {
-                            yield return obj;
-                        }
-                    }
-
-                    currentType = currentType.BaseType;
-                } while (currentType != null);
-            }
-        }
 
         public static bool IsNullableType(this Type type)
         {
