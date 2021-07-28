@@ -4,9 +4,6 @@
   "version": "0.1.1",
   "unity": "2020.3",
   "description": "Reflection utilities and helpers for Unity3D.",
-  "library": "!!library!!",
-  "csrootnamespace": "!!csrootnamespace!!",
-  "tagline": "!!tagline!!",
   "keywords": [
     "Scripts",
     "Tool"
