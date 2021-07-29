@@ -13,5 +13,4 @@
 
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
-| 568a84aa5bf04e4566d4c957594b760140c3cf4b | 2021-07-28 | Chris Schubert | Removing unnecessary properties |
-| 953e35cbfaba8e077fef6f902fbd97e1a64e1e7f | 2021-07-28 | Chris Schubert | updates |
+

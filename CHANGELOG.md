@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| 7f9199d7a8dddb12895b026dba5f33878bc400e0 | 2021-07-29 | Chris Schubert | Updates |
+
+
+ ## Tag: `v0.1.2`
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | 568a84aa5bf04e4566d4c957594b760140c3cf4b | 2021-07-28 | Chris Schubert | Removing unnecessary properties |
 | 953e35cbfaba8e077fef6f902fbd97e1a64e1e7f | 2021-07-28 | Chris Schubert | updates |
 
