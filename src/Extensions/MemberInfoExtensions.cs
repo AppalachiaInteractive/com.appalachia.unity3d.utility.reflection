@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
 namespace Appalachia.Utility.Reflection.Extensions
 {
-    public static class MemberInfoExtensions
+    public static partial class ReflectionExtensions
     {
-        
-        public static IEnumerable<T> GetTypeMembersMatchingType<T>(this Type type, BindingFlags flags = BindingFlags.Default)
+        public static IEnumerable<T> GetTypeMembersMatchingType<T>(
+            this Type type,
+            BindingFlags flags = BindingFlags.Default)
             where T : MemberInfo
         {
             if (type == null)
@@ -53,7 +55,7 @@ namespace Appalachia.Utility.Reflection.Extensions
                 } while (currentType != null);
             }
         }
-        
+
         public static Type GetReturnType(this MemberInfo memberInfo)
         {
             return memberInfo switch
@@ -72,7 +74,9 @@ namespace Appalachia.Utility.Reflection.Extensions
             {
                 FieldInfo info    => info.GetValue(obj),
                 PropertyInfo info => info.GetGetMethod(true).Invoke(obj, null),
-                _                 => throw new ArgumentException($"Can't get the value of a {member.GetType().Name}")
+                _ => throw new ArgumentException(
+                    $"Can't get the value of a {member.GetType().Name}"
+                )
             };
         }
 
@@ -95,11 +99,15 @@ namespace Appalachia.Utility.Reflection.Extensions
                     break;
                 }
                 default:
-                    throw new ArgumentException($"Can't set the value of a {member.GetType().Name}");
+                    throw new ArgumentException(
+                        $"Can't set the value of a {member.GetType().Name}"
+                    );
             }
         }
 
-        public static IEnumerable<MemberInfo> GetAllTypeMembers(this Type type, BindingFlags flags = BindingFlags.Default)
+        public static IEnumerable<MemberInfo> GetAllTypeMembers(
+            this Type type,
+            BindingFlags flags = BindingFlags.Default)
         {
             var currentType = type;
             MemberInfo[] memberInfoArray;
@@ -136,17 +144,77 @@ namespace Appalachia.Utility.Reflection.Extensions
             return type.GetAllTypeMembers(flags).Where(member => member.Name == name);
         }
 
-        public static IEnumerable<MemberInfo> GetTypeMembersByMemberType(this Type type,
-                                                                     BindingFlags flags = BindingFlags.Default,
-                                                                     params MemberTypes[] memberTypes)
+        public static IEnumerable<T> GetTypeMembersByMemberType<T>(
+            this Type type,
+            BindingFlags flags = BindingFlags.Default)
+            where T : MemberInfo
         {
-            return type.GetAllTypeMembers(flags).Where(member => memberTypes.Contains(member.MemberType));
+            return type.GetAllTypeMembers(flags)
+                       .Where(member => typeof(T).IsMemberType(member.MemberType))
+                       .Cast<T>();
         }
 
-        public static IEnumerable<MemberInfo> GetFieldsAndProperties(this Type type,
-                                                                     BindingFlags flags = BindingFlags.Default)
+        public static bool IsMemberType(this Type t, MemberTypes ty)
+        {
+            return ty switch
+            {
+                MemberTypes.All => (t == typeof(MemberInfo)) || t.InheritsFrom<MemberInfo>(),
+                MemberTypes.Constructor => (t == typeof(ConstructorInfo)) ||
+                                           t.InheritsFrom<ConstructorInfo>(),
+                MemberTypes.Event      => (t == typeof(EventInfo)) || t.InheritsFrom<EventInfo>(),
+                MemberTypes.Field      => (t == typeof(FieldInfo)) || t.InheritsFrom<FieldInfo>(),
+                MemberTypes.Method     => (t == typeof(MethodInfo)) || t.InheritsFrom<MethodInfo>(),
+                MemberTypes.NestedType => (t == typeof(TypeInfo)) || t.InheritsFrom<TypeInfo>(),
+                MemberTypes.Property => (t == typeof(PropertyInfo)) ||
+                                        t.InheritsFrom<PropertyInfo>(),
+                MemberTypes.TypeInfo => (t == typeof(TypeInfo)) || t.InheritsFrom<TypeInfo>(),
+                _                    => throw new ArgumentOutOfRangeException(nameof(ty), ty, null)
+            };
+        }
+
+        public static IEnumerable<MemberInfo> GetTypeMembersByMemberType(
+            this Type type,
+            BindingFlags flags = BindingFlags.Default,
+            params MemberTypes[] memberTypes)
+        {
+            return type.GetAllTypeMembers(flags)
+                       .Where(member => memberTypes.Contains(member.MemberType));
+        }
+
+        public static IEnumerable<MemberInfo> GetFieldsAndProperties(
+            this Type type,
+            BindingFlags flags = BindingFlags.Default)
         {
             return GetTypeMembersByMemberType(type, flags, MemberTypes.Property, MemberTypes.Field);
+        }
+
+        public static bool IsStatic(this MemberInfo member)
+        {
+            switch (member)
+            {
+                case FieldInfo fieldInfo:
+                    return fieldInfo.IsStatic;
+                case PropertyInfo propertyInfo:
+                    return !propertyInfo.CanRead
+                        ? propertyInfo.GetSetMethod(true).IsStatic
+                        : propertyInfo.GetGetMethod(true).IsStatic;
+                case MethodBase methodBase:
+                    return methodBase.IsStatic;
+                case EventInfo eventInfo:
+                    return eventInfo.GetRaiseMethod(true).IsStatic;
+                case Type type:
+                    return type.IsSealed && type.IsAbstract;
+                default:
+                    throw new NotSupportedException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "Unable to determine IsStatic for member {0}.{1}MemberType was {2} but only fields, properties, methods, events and types are supported.",
+                            member.DeclaringType.FullName,
+                            member.Name,
+                            member.GetType().FullName
+                        )
+                    );
+            }
         }
     }
 }

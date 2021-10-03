@@ -9,6 +9,11 @@ namespace Appalachia.Utility.Reflection.Delegated
 {
     public static class StaticRoutine
     {
+        public static Action CreateDelegate(MethodInfo method)
+        {
+            return (Action) Delegate.CreateDelegate(typeof(Action), method);
+        }
+        
         public static Action CreateDelegate(
             Type t,
             string methodName,
@@ -25,9 +30,12 @@ namespace Appalachia.Utility.Reflection.Delegated
         private const string _PRF_PFX = nameof(StaticRoutine<T>) + ".";
         private readonly Action _invoke;
 
-        public StaticRoutine(string method, BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
+        public StaticRoutine(
+            string method,
+            BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
         {
-            var bestMethod = ReflectionCache.PrepareAndGetBestMethod(typeof(T), method, flags, null);
+            var bestMethod =
+                ReflectionCache.PrepareAndGetBestMethod(typeof(T), method, flags, null);
 
             _invoke = (Action) Delegate.CreateDelegate(typeof(Action), bestMethod);
         }
@@ -40,9 +48,17 @@ namespace Appalachia.Utility.Reflection.Delegated
         private const string _PRF_PFX = nameof(StaticRoutine<T, T0>) + ".";
         private readonly Action<T0> _invoke;
 
-        public StaticRoutine(string method, BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
+        public StaticRoutine(
+            string method,
+            BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
         {
-            var bestMethod = ReflectionCache.PrepareAndGetBestMethod(typeof(T), method, flags, null, typeof(T0));
+            var bestMethod = ReflectionCache.PrepareAndGetBestMethod(
+                typeof(T),
+                method,
+                flags,
+                null,
+                typeof(T0)
+            );
 
             _invoke = (Action<T0>) Delegate.CreateDelegate(typeof(Action<T0>), bestMethod);
         }
@@ -55,7 +71,9 @@ namespace Appalachia.Utility.Reflection.Delegated
         private const string _PRF_PFX = nameof(StaticRoutine<T, T0, T1>) + ".";
         private readonly Action<T0, T1> _invoke;
 
-        public StaticRoutine(string method, BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
+        public StaticRoutine(
+            string method,
+            BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
         {
             var bestMethod = ReflectionCache.PrepareAndGetBestMethod(
                 typeof(T),
@@ -77,7 +95,9 @@ namespace Appalachia.Utility.Reflection.Delegated
         private const string _PRF_PFX = nameof(StaticRoutine<T, T0, T1, T2>) + ".";
         private readonly Action<T0, T1, T2> _invoke;
 
-        public StaticRoutine(string method, BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
+        public StaticRoutine(
+            string method,
+            BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
         {
             var bestMethod = ReflectionCache.PrepareAndGetBestMethod(
                 typeof(T),
@@ -89,7 +109,10 @@ namespace Appalachia.Utility.Reflection.Delegated
                 typeof(T2)
             );
 
-            _invoke = (Action<T0, T1, T2>) Delegate.CreateDelegate(typeof(Action<T0, T1, T2>), bestMethod);
+            _invoke = (Action<T0, T1, T2>) Delegate.CreateDelegate(
+                typeof(Action<T0, T1, T2>),
+                bestMethod
+            );
         }
 
         public Action<T0, T1, T2> Invoke => _invoke;
@@ -100,7 +123,9 @@ namespace Appalachia.Utility.Reflection.Delegated
         private const string _PRF_PFX = nameof(StaticRoutine<T, T0, T1, T2, T3>) + ".";
         private readonly Action<T0, T1, T2, T3> _invoke;
 
-        public StaticRoutine(string method, BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
+        public StaticRoutine(
+            string method,
+            BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
         {
             var bestMethod = ReflectionCache.PrepareAndGetBestMethod(
                 typeof(T),
@@ -113,7 +138,10 @@ namespace Appalachia.Utility.Reflection.Delegated
                 typeof(T3)
             );
 
-            _invoke = (Action<T0, T1, T2, T3>) Delegate.CreateDelegate(typeof(Action<T0, T1, T2, T3>), bestMethod);
+            _invoke = (Action<T0, T1, T2, T3>) Delegate.CreateDelegate(
+                typeof(Action<T0, T1, T2, T3>),
+                bestMethod
+            );
         }
 
         public Action<T0, T1, T2, T3> Invoke => _invoke;
@@ -124,7 +152,9 @@ namespace Appalachia.Utility.Reflection.Delegated
         private const string _PRF_PFX = nameof(StaticRoutine<T, T0, T1, T2, T3, T4>) + ".";
         private readonly Action<T0, T1, T2, T3, T4> _invoke;
 
-        public StaticRoutine(string method, BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
+        public StaticRoutine(
+            string method,
+            BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
         {
             var bestMethod = ReflectionCache.PrepareAndGetBestMethod(
                 typeof(T),
@@ -152,7 +182,9 @@ namespace Appalachia.Utility.Reflection.Delegated
         private const string _PRF_PFX = nameof(StaticRoutine<T, T0, T1, T2, T3, T4, T5>) + ".";
         private readonly Action<T0, T1, T2, T3, T4, T5> _invoke;
 
-        public StaticRoutine(string method, BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
+        public StaticRoutine(
+            string method,
+            BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
         {
             var bestMethod = ReflectionCache.PrepareAndGetBestMethod(
                 typeof(T),
@@ -181,7 +213,9 @@ namespace Appalachia.Utility.Reflection.Delegated
         private const string _PRF_PFX = nameof(StaticRoutine<T, T0, T1, T2, T3, T4, T5, T6>) + ".";
         private readonly Action<T0, T1, T2, T3, T4, T5, T6> _invoke;
 
-        public StaticRoutine(string method, BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
+        public StaticRoutine(
+            string method,
+            BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
         {
             var bestMethod = ReflectionCache.PrepareAndGetBestMethod(
                 typeof(T),
@@ -208,10 +242,14 @@ namespace Appalachia.Utility.Reflection.Delegated
 
     public class StaticRoutine<T, T0, T1, T2, T3, T4, T5, T6, T7>
     {
-        private const string _PRF_PFX = nameof(StaticRoutine<T, T0, T1, T2, T3, T4, T5, T6, T7>) + ".";
+        private const string _PRF_PFX =
+            nameof(StaticRoutine<T, T0, T1, T2, T3, T4, T5, T6, T7>) + ".";
+
         private readonly Action<T0, T1, T2, T3, T4, T5, T6, T7> _invoke;
 
-        public StaticRoutine(string method, BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
+        public StaticRoutine(
+            string method,
+            BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
         {
             var bestMethod = ReflectionCache.PrepareAndGetBestMethod(
                 typeof(T),
@@ -239,10 +277,14 @@ namespace Appalachia.Utility.Reflection.Delegated
 
     public class StaticRoutine<T, T0, T1, T2, T3, T4, T5, T6, T7, T8>
     {
-        private const string _PRF_PFX = nameof(StaticRoutine<T, T0, T1, T2, T3, T4, T5, T6, T7, T8>) + ".";
+        private const string _PRF_PFX =
+            nameof(StaticRoutine<T, T0, T1, T2, T3, T4, T5, T6, T7, T8>) + ".";
+
         private readonly Action<T0, T1, T2, T3, T4, T5, T6, T7, T8> _invoke;
 
-        public StaticRoutine(string method, BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
+        public StaticRoutine(
+            string method,
+            BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
         {
             var bestMethod = ReflectionCache.PrepareAndGetBestMethod(
                 typeof(T),
@@ -271,10 +313,14 @@ namespace Appalachia.Utility.Reflection.Delegated
 
     public class StaticRoutine<T, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     {
-        private const string _PRF_PFX = nameof(StaticRoutine<T, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>) + ".";
+        private const string _PRF_PFX =
+            nameof(StaticRoutine<T, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>) + ".";
+
         private readonly Action<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> _invoke;
 
-        public StaticRoutine(string method, BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
+        public StaticRoutine(
+            string method,
+            BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic)
         {
             var bestMethod = ReflectionCache.PrepareAndGetBestMethod(
                 typeof(T),

@@ -1,6 +1,6 @@
 {
-	"name": "Appalachia.Utility.Reflection",
-    "rootNamespace": "Appalachia.Utility.Reflection",
+    "name": "Appalachia.Utility.Reflection",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

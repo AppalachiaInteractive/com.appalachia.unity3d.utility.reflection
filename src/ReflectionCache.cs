@@ -13,46 +13,52 @@ namespace Appalachia.Utility.Reflection
     {
         private const string _PRF_PFX = nameof(ReflectionCache) + ".";
 
-        private static readonly Dictionary<Type, Dictionary<BindingFlags, Dictionary<string, MethodInfo[]>>>
-            _METHOD_CACHE = new Dictionary<Type, Dictionary<BindingFlags, Dictionary<string, MethodInfo[]>>>();
+        private static readonly
+            Dictionary<Type, Dictionary<BindingFlags, Dictionary<string, MethodInfo[]>>>
+            _METHOD_CACHE = new();
 
-        private static readonly Dictionary<string, List<MethodInfo>>
-            _temps = new Dictionary<string, List<MethodInfo>>();
+        private static readonly Dictionary<string, List<MethodInfo>> _temps = new();
 
-        private static readonly Dictionary<MethodInfo, ParameterInfo[]> _methodParams =
-            new Dictionary<MethodInfo, ParameterInfo[]>();
+        private static readonly Dictionary<MethodInfo, ParameterInfo[]> _methodParams = new();
 
         private static readonly ProfilerMarker _PRF_PrepareMethodInfo =
-            new ProfilerMarker(_PRF_PFX + nameof(PrepareMethodInfo));
+            new(_PRF_PFX + nameof(PrepareMethodInfo));
 
-        private static readonly ProfilerMarker
-            _PRF_GetBestMethod = new ProfilerMarker(_PRF_PFX + nameof(GetBestMethod));
+        private static readonly ProfilerMarker _PRF_GetBestMethod =
+            new(_PRF_PFX + nameof(GetBestMethod));
 
         private static readonly ProfilerMarker _PRF_GetBestMethod_ReturnTypeCheck =
-            new ProfilerMarker(_PRF_PFX + nameof(GetBestMethod) + ".ReturnTypeCheck");
+            new(_PRF_PFX + nameof(GetBestMethod) + ".ReturnTypeCheck");
 
         private static readonly ProfilerMarker _PRF_GetBestMethod_GetParameters =
-            new ProfilerMarker(_PRF_PFX + nameof(GetBestMethod) + ".GetParameters");
+            new(_PRF_PFX + nameof(GetBestMethod) + ".GetParameters");
 
         private static readonly ProfilerMarker _PRF_GetBestMethod_GetParameters_GetFromMethod =
-            new ProfilerMarker(_PRF_PFX + nameof(GetBestMethod) + ".GetParameters.GetFromMethod");
+            new(_PRF_PFX + nameof(GetBestMethod) + ".GetParameters.GetFromMethod");
 
         private static readonly ProfilerMarker _PRF_GetBestMethod_GetParameters_GetFromCache =
-            new ProfilerMarker(_PRF_PFX + nameof(GetBestMethod) + ".GetParameters.GetFromCache");
+            new(_PRF_PFX + nameof(GetBestMethod) + ".GetParameters.GetFromCache");
 
         private static readonly ProfilerMarker _PRF_GetBestMethod_LengthCheck =
-            new ProfilerMarker(_PRF_PFX + nameof(GetBestMethod) + ".LengthCheck");
+            new(_PRF_PFX + nameof(GetBestMethod) + ".LengthCheck");
 
         private static readonly ProfilerMarker _PRF_GetBestMethod_ParameterTypeCheck =
-            new ProfilerMarker(_PRF_PFX + nameof(GetBestMethod) + ".ParameterTypeCheck");
+            new(_PRF_PFX + nameof(GetBestMethod) + ".ParameterTypeCheck");
 
-        public static void PrepareMethodInfo(Type t, string methodName, BindingFlags flags, out MethodInfo[] methods)
+        public static void PrepareMethodInfo(
+            Type t,
+            string methodName,
+            BindingFlags flags,
+            out MethodInfo[] methods)
         {
             using (_PRF_PrepareMethodInfo.Auto())
             {
                 if (!_METHOD_CACHE.ContainsKey(t))
                 {
-                    _METHOD_CACHE.Add(t, new Dictionary<BindingFlags, Dictionary<string, MethodInfo[]>>());
+                    _METHOD_CACHE.Add(
+                        t,
+                        new Dictionary<BindingFlags, Dictionary<string, MethodInfo[]>>()
+                    );
                 }
 
                 if (!_METHOD_CACHE[t].ContainsKey(flags))
@@ -92,7 +98,10 @@ namespace Appalachia.Utility.Reflection
             }
         }
 
-        public static MethodInfo GetBestMethod(MethodInfo[] candidates, Type returnType, params Type[] args)
+        public static MethodInfo GetBestMethod(
+            MethodInfo[] candidates,
+            Type returnType,
+            params Type[] args)
         {
             using (_PRF_GetBestMethod.Auto())
             {

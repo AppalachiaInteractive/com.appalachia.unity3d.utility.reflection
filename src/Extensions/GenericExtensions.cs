@@ -5,19 +5,19 @@ using System.Text;
 
 namespace Appalachia.Utility.Reflection.Extensions
 {
-    public static class GenericExtensions
+    public static partial class ReflectionExtensions
     {
         private static readonly Type GenericListInterface = typeof(IList<>);
         private static readonly Type GenericCollectionInterface = typeof(ICollection<>);
-        private static readonly object GenericConstraintsSatisfactionLock = new object();
+        private static readonly object GenericConstraintsSatisfactionLock = new();
 
-        private static readonly HashSet<Type> GenericConstraintsSatisfactionProcessedParams = new HashSet<Type>();
+        private static readonly HashSet<Type> GenericConstraintsSatisfactionProcessedParams = new();
 
-        private static readonly Dictionary<Type, Type> GenericConstraintsSatisfactionInferredParameters =
-            new Dictionary<Type, Type>();
+        private static readonly Dictionary<Type, Type>
+            GenericConstraintsSatisfactionInferredParameters = new();
 
         private static readonly Dictionary<Type, Type> GenericConstraintsSatisfactionResolvedMap =
-            new Dictionary<Type, Type>();
+            new();
 
         public static bool TryInferGenericParameters(
             this Type genericTypeDefinition,
@@ -36,7 +36,9 @@ namespace Appalachia.Utility.Reflection.Extensions
 
             if (!genericTypeDefinition.IsGenericType)
             {
-                throw new ArgumentException("The genericTypeDefinition parameter must be a generic type.");
+                throw new ArgumentException(
+                    "The genericTypeDefinition parameter must be a generic type."
+                );
             }
 
             lock (GenericConstraintsSatisfactionLock)
@@ -53,7 +55,8 @@ namespace Appalachia.Utility.Reflection.Extensions
                     for (var index = 0; index < typeArray.Length; ++index)
                     {
                         if (!typeArray[index].IsGenericParameter &&
-                            (!typeArray[index].IsGenericType || typeArray[index].IsFullyConstructedGenericType()))
+                            (!typeArray[index].IsGenericType ||
+                             typeArray[index].IsFullyConstructedGenericType()))
                         {
                             inferredParameters[genericArguments1[index]] = typeArray[index];
                         }
@@ -99,27 +102,37 @@ namespace Appalachia.Utility.Reflection.Extensions
                             {
                                 if (parameterConstraint.IsGenericType)
                                 {
-                                    var genericTypeDefinition1 = parameterConstraint.GetGenericTypeDefinition();
-                                    var genericArguments2 = parameterConstraint.GetGenericArguments();
+                                    var genericTypeDefinition1 =
+                                        parameterConstraint.GetGenericTypeDefinition();
+                                    var genericArguments2 =
+                                        parameterConstraint.GetGenericArguments();
                                     Type[] typeArray;
                                     if (knownParameter.IsGenericType &&
-                                        (genericTypeDefinition1 == knownParameter.GetGenericTypeDefinition()))
+                                        (genericTypeDefinition1 ==
+                                         knownParameter.GetGenericTypeDefinition()))
                                     {
                                         typeArray = knownParameter.GetGenericArguments();
                                     }
                                     else if (genericTypeDefinition1.IsInterface &&
-                                             knownParameter.ImplementsOpenGenericInterface(genericTypeDefinition1))
+                                             knownParameter.ImplementsOpenGenericInterface(
+                                                 genericTypeDefinition1
+                                             ))
                                     {
-                                        typeArray = knownParameter.GetArgumentsOfInheritedOpenGenericInterface(
-                                            genericTypeDefinition1
-                                        );
+                                        typeArray =
+                                            knownParameter
+                                               .GetArgumentsOfInheritedOpenGenericInterface(
+                                                    genericTypeDefinition1
+                                                );
                                     }
                                     else if (genericTypeDefinition1.IsClass &&
-                                             knownParameter.ImplementsOpenGenericClass(genericTypeDefinition1))
+                                             knownParameter.ImplementsOpenGenericClass(
+                                                 genericTypeDefinition1
+                                             ))
                                     {
-                                        typeArray = knownParameter.GetArgumentsOfInheritedOpenGenericClass(
-                                            genericTypeDefinition1
-                                        );
+                                        typeArray =
+                                            knownParameter.GetArgumentsOfInheritedOpenGenericClass(
+                                                genericTypeDefinition1
+                                            );
                                     }
                                     else
                                     {
@@ -131,7 +144,8 @@ namespace Appalachia.Utility.Reflection.Extensions
                                     {
                                         if (genericArguments2[index].IsGenericParameter)
                                         {
-                                            inferredParameters[genericArguments2[index]] = typeArray[index];
+                                            inferredParameters[genericArguments2[index]] =
+                                                typeArray[index];
                                         }
                                     }
                                 }
@@ -159,7 +173,9 @@ namespace Appalachia.Utility.Reflection.Extensions
             }
         }
 
-        public static bool AreGenericConstraintsSatisfiedBy(this Type genericType, params Type[] parameters)
+        public static bool AreGenericConstraintsSatisfiedBy(
+            this Type genericType,
+            params Type[] parameters)
         {
             if (genericType == null)
             {
@@ -173,13 +189,17 @@ namespace Appalachia.Utility.Reflection.Extensions
 
             if (!genericType.IsGenericType)
             {
-                throw new ArgumentException("The genericTypeDefinition parameter must be a generic type.");
+                throw new ArgumentException(
+                    "The genericTypeDefinition parameter must be a generic type."
+                );
             }
 
             return AreGenericConstraintsSatisfiedBy(genericType.GetGenericArguments(), parameters);
         }
 
-        public static bool AreGenericConstraintsSatisfiedBy(this MethodBase genericMethod, params Type[] parameters)
+        public static bool AreGenericConstraintsSatisfiedBy(
+            this MethodBase genericMethod,
+            params Type[] parameters)
         {
             if (genericMethod == null)
             {
@@ -193,10 +213,15 @@ namespace Appalachia.Utility.Reflection.Extensions
 
             if (!genericMethod.IsGenericMethod)
             {
-                throw new ArgumentException("The genericMethod parameter must be a generic method.");
+                throw new ArgumentException(
+                    "The genericMethod parameter must be a generic method."
+                );
             }
 
-            return AreGenericConstraintsSatisfiedBy(genericMethod.GetGenericArguments(), parameters);
+            return AreGenericConstraintsSatisfiedBy(
+                genericMethod.GetGenericArguments(),
+                parameters
+            );
         }
 
         public static bool AreGenericConstraintsSatisfiedBy(Type[] definitions, Type[] parameters)
@@ -212,7 +237,8 @@ namespace Appalachia.Utility.Reflection.Extensions
                 satisfactionResolvedMap.Clear();
                 for (var index = 0; index < definitions.Length; ++index)
                 {
-                    if (!definitions[index].GenericParameterIsFulfilledBy(parameters[index], satisfactionResolvedMap))
+                    if (!definitions[index]
+                       .GenericParameterIsFulfilledBy(parameters[index], satisfactionResolvedMap))
                     {
                         return false;
                     }
@@ -222,7 +248,9 @@ namespace Appalachia.Utility.Reflection.Extensions
             }
         }
 
-        public static bool GenericParameterIsFulfilledBy(this Type genericParameterDefinition, Type parameterType)
+        public static bool GenericParameterIsFulfilledBy(
+            this Type genericParameterDefinition,
+            Type parameterType)
         {
             lock (GenericConstraintsSatisfactionLock)
             {
@@ -255,7 +283,8 @@ namespace Appalachia.Utility.Reflection.Extensions
                 throw new ArgumentNullException(nameof(resolvedMap));
             }
 
-            if (!genericParameterDefinition.IsGenericParameter && (genericParameterDefinition == parameterType))
+            if (!genericParameterDefinition.IsGenericParameter &&
+                (genericParameterDefinition == parameterType))
             {
                 return true;
             }
@@ -275,7 +304,8 @@ namespace Appalachia.Utility.Reflection.Extensions
             var parameterAttributes = genericParameterDefinition.GenericParameterAttributes;
             if (parameterAttributes != GenericParameterAttributes.None)
             {
-                if ((parameterAttributes & GenericParameterAttributes.NotNullableValueTypeConstraint) ==
+                if ((parameterAttributes &
+                     GenericParameterAttributes.NotNullableValueTypeConstraint) ==
                     GenericParameterAttributes.NotNullableValueTypeConstraint)
                 {
                     if (!parameterType.IsValueType ||
@@ -285,17 +315,21 @@ namespace Appalachia.Utility.Reflection.Extensions
                         return false;
                     }
                 }
-                else if (((parameterAttributes & GenericParameterAttributes.ReferenceTypeConstraint) ==
-                          GenericParameterAttributes.ReferenceTypeConstraint) &&
+                else if ((
+                             (parameterAttributes &
+                              GenericParameterAttributes.ReferenceTypeConstraint) ==
+                             GenericParameterAttributes.ReferenceTypeConstraint) &&
                          parameterType.IsValueType)
                 {
                     return false;
                 }
 
-                if (((parameterAttributes & GenericParameterAttributes.DefaultConstructorConstraint) ==
+                if (((parameterAttributes &
+                      GenericParameterAttributes.DefaultConstructorConstraint) ==
                      GenericParameterAttributes.DefaultConstructorConstraint) &&
                     (parameterType.IsAbstract ||
-                     (!parameterType.IsValueType && (parameterType.GetConstructor(Type.EmptyTypes) == null))))
+                     (!parameterType.IsValueType &&
+                      (parameterType.GetConstructor(Type.EmptyTypes) == null))))
                 {
                     return false;
                 }
@@ -307,7 +341,9 @@ namespace Appalachia.Utility.Reflection.Extensions
                 return false;
             }
 
-            for (var index = 0; index < genericParameterDefinition.GetGenericParameterConstraints().Length; index++)
+            for (var index = 0;
+                index < genericParameterDefinition.GetGenericParameterConstraints().Length;
+                index++)
             {
                 var index1 = genericParameterDefinition.GetGenericParameterConstraints()[index];
                 if (index1.IsGenericParameter && resolvedMap.ContainsKey(index1))
@@ -317,7 +353,11 @@ namespace Appalachia.Utility.Reflection.Extensions
 
                 if (index1.IsGenericParameter)
                 {
-                    if (!index1.GenericParameterIsFulfilledBy(parameterType, resolvedMap, processedParams))
+                    if (!index1.GenericParameterIsFulfilledBy(
+                        parameterType,
+                        resolvedMap,
+                        processedParams
+                    ))
                     {
                         return false;
                     }
@@ -326,7 +366,9 @@ namespace Appalachia.Utility.Reflection.Extensions
                 {
                     if (!index1.IsClass && !index1.IsInterface && !index1.IsValueType)
                     {
-                        throw new Exception($"Unknown parameter constraint type! {index1.ReadableName()}");
+                        throw new Exception(
+                            $"Unknown parameter constraint type! {index1.GetReadableName()}"
+                        );
                     }
 
                     if (index1.IsGenericType)
@@ -346,11 +388,16 @@ namespace Appalachia.Utility.Reflection.Extensions
                                 return false;
                             }
 
-                            typeArray = parameterType.GetArgumentsOfInheritedOpenGenericClass(genericTypeDefinition);
+                            typeArray =
+                                parameterType.GetArgumentsOfInheritedOpenGenericClass(
+                                    genericTypeDefinition
+                                );
                         }
                         else
                         {
-                            if (!parameterType.ImplementsOpenGenericInterface(genericTypeDefinition))
+                            if (!parameterType.ImplementsOpenGenericInterface(
+                                genericTypeDefinition
+                            ))
                             {
                                 return false;
                             }
@@ -372,7 +419,11 @@ namespace Appalachia.Utility.Reflection.Extensions
                             if (resolved.IsGenericParameter)
                             {
                                 if (!processedParams.Contains(resolved) &&
-                                    !resolved.GenericParameterIsFulfilledBy(type, resolvedMap, processedParams))
+                                    !resolved.GenericParameterIsFulfilledBy(
+                                        type,
+                                        resolvedMap,
+                                        processedParams
+                                    ))
                                 {
                                     return false;
                                 }
@@ -394,7 +445,9 @@ namespace Appalachia.Utility.Reflection.Extensions
             return true;
         }
 
-        public static string GetGenericConstraintsString(this Type type, bool useFullTypeNames = false)
+        public static string GetGenericConstraintsString(
+            this Type type,
+            bool useFullTypeNames = false)
         {
             if (type == null)
             {
@@ -403,20 +456,27 @@ namespace Appalachia.Utility.Reflection.Extensions
 
             if (!type.IsGenericTypeDefinition)
             {
-                throw new ArgumentException($"Type '{type.ReadableName()}' is not a generic type definition!");
+                throw new ArgumentException(
+                    $"Type '{type.GetReadableName()}' is not a generic type definition!"
+                );
             }
 
             var genericArguments = type.GetGenericArguments();
             var strArray = new string[genericArguments.Length];
             for (var index = 0; index < genericArguments.Length; ++index)
             {
-                strArray[index] = GetGenericParameterConstraintsString(genericArguments[index], useFullTypeNames);
+                strArray[index] = GetGenericParameterConstraintsString(
+                    genericArguments[index],
+                    useFullTypeNames
+                );
             }
 
             return string.Join(" ", strArray);
         }
 
-        public static string GetGenericParameterConstraintsString(this Type type, bool useFullTypeNames = false)
+        public static string GetGenericParameterConstraintsString(
+            this Type type,
+            bool useFullTypeNames = false)
         {
             if (type == null)
             {
@@ -425,7 +485,9 @@ namespace Appalachia.Utility.Reflection.Extensions
 
             if (!type.IsGenericParameter)
             {
-                throw new ArgumentException($"Type '{type.ReadableName()}' is not a generic parameter!");
+                throw new ArgumentException(
+                    $"Type '{type.GetReadableName()}' is not a generic parameter!"
+                );
             }
 
             var stringBuilder = new StringBuilder();
@@ -473,7 +535,7 @@ namespace Appalachia.Utility.Reflection.Extensions
                         }
                         else
                         {
-                            stringBuilder.Append(type1.ReadableName());
+                            stringBuilder.Append(type1.GetReadableName());
                         }
                     }
                     else
@@ -485,7 +547,7 @@ namespace Appalachia.Utility.Reflection.Extensions
                         }
                         else
                         {
-                            stringBuilder.Append(type1.ReadableName());
+                            stringBuilder.Append(type1.GetReadableName());
                         }
 
                         flag = true;
@@ -579,7 +641,8 @@ namespace Appalachia.Utility.Reflection.Extensions
 
             foreach (var genericArgument in type.GetGenericArguments())
             {
-                if (genericArgument.IsGenericParameter || !genericArgument.IsFullyConstructedGenericType())
+                if (genericArgument.IsGenericParameter ||
+                    !genericArgument.IsFullyConstructedGenericType())
                 {
                     return false;
                 }
@@ -600,7 +663,8 @@ namespace Appalachia.Utility.Reflection.Extensions
             }
 
             if ((candidateType == openGenericInterfaceType) ||
-                (candidateType.IsGenericType && (candidateType.GetGenericTypeDefinition() == openGenericInterfaceType)))
+                (candidateType.IsGenericType &&
+                 (candidateType.GetGenericTypeDefinition() == openGenericInterfaceType)))
             {
                 return candidateType.GetGenericArguments();
             }
@@ -610,7 +674,9 @@ namespace Appalachia.Utility.Reflection.Extensions
                 if (candidateType1.IsGenericType)
                 {
                     var genericInterface =
-                        candidateType1.GetArgumentsOfInheritedOpenGenericInterface(openGenericInterfaceType);
+                        candidateType1.GetArgumentsOfInheritedOpenGenericInterface(
+                            openGenericInterfaceType
+                        );
                     if (genericInterface != null)
                     {
                         return genericInterface;
@@ -628,10 +694,13 @@ namespace Appalachia.Utility.Reflection.Extensions
                 : candidateType.ImplementsOpenGenericClass(openGenericType);
         }
 
-        public static bool ImplementsOpenGenericInterface(this Type candidateType, Type openGenericInterfaceType)
+        public static bool ImplementsOpenGenericInterface(
+            this Type candidateType,
+            Type openGenericInterfaceType)
         {
             if ((candidateType == openGenericInterfaceType) ||
-                (candidateType.IsGenericType && (candidateType.GetGenericTypeDefinition() == openGenericInterfaceType)))
+                (candidateType.IsGenericType &&
+                 (candidateType.GetGenericTypeDefinition() == openGenericInterfaceType)))
             {
                 return true;
             }
@@ -649,7 +718,8 @@ namespace Appalachia.Utility.Reflection.Extensions
 
         public static bool ImplementsOpenGenericClass(this Type candidateType, Type openGenericType)
         {
-            if (candidateType.IsGenericType && (candidateType.GetGenericTypeDefinition() == openGenericType))
+            if (candidateType.IsGenericType &&
+                (candidateType.GetGenericTypeDefinition() == openGenericType))
             {
                 return true;
             }
@@ -658,22 +728,29 @@ namespace Appalachia.Utility.Reflection.Extensions
             return (baseType != null) && baseType.ImplementsOpenGenericClass(openGenericType);
         }
 
-        public static Type[] GetArgumentsOfInheritedOpenGenericType(this Type candidateType, Type openGenericType)
+        public static Type[] GetArgumentsOfInheritedOpenGenericType(
+            this Type candidateType,
+            Type openGenericType)
         {
             return openGenericType.IsInterface
                 ? candidateType.GetArgumentsOfInheritedOpenGenericInterface(openGenericType)
                 : candidateType.GetArgumentsOfInheritedOpenGenericClass(openGenericType);
         }
 
-        public static Type[] GetArgumentsOfInheritedOpenGenericClass(this Type candidateType, Type openGenericType)
+        public static Type[] GetArgumentsOfInheritedOpenGenericClass(
+            this Type candidateType,
+            Type openGenericType)
         {
-            if (candidateType.IsGenericType && (candidateType.GetGenericTypeDefinition() == openGenericType))
+            if (candidateType.IsGenericType &&
+                (candidateType.GetGenericTypeDefinition() == openGenericType))
             {
                 return candidateType.GetGenericArguments();
             }
 
             var baseType = candidateType.BaseType;
-            return baseType != null ? baseType.GetArgumentsOfInheritedOpenGenericClass(openGenericType) : null;
+            return baseType != null
+                ? baseType.GetArgumentsOfInheritedOpenGenericClass(openGenericType)
+                : null;
         }
     }
 }

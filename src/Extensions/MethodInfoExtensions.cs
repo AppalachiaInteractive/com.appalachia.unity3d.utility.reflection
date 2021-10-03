@@ -11,11 +11,11 @@ using System.Text;
 
 namespace Appalachia.Utility.Reflection.Extensions
 {
-    public static class MethodInfoExtensions
+    public static partial class ReflectionExtensions
     {
         private static Dictionary<MethodBase, string> _cache;
 
-        public static string ReadableName(this MethodBase method, string extensionMethodPrefix)
+        public static string GetReadableName(this MethodBase method, string extensionMethodPrefix)
         {
             if (_cache == null)
             {
@@ -45,7 +45,7 @@ namespace Appalachia.Utility.Reflection.Extensions
                         stringBuilder.Append(", ");
                     }
 
-                    stringBuilder.Append(genericArguments[index].ReadableName());
+                    stringBuilder.Append(genericArguments[index].GetReadableName());
                 }
 
                 stringBuilder.Append(">");
@@ -71,7 +71,7 @@ namespace Appalachia.Utility.Reflection.Extensions
             for (var length = parameterInfoArray.Length; index < length; ++index)
             {
                 var parameterInfo = parameterInfoArray[index];
-                var niceName = parameterInfo.ParameterType.ReadableName();
+                var niceName = parameterInfo.ParameterType.GetReadableName();
                 stringBuilder.Append(niceName);
                 stringBuilder.Append(" ");
                 stringBuilder.Append(parameterInfo.Name);
@@ -86,7 +86,7 @@ namespace Appalachia.Utility.Reflection.Extensions
 
         public static string GetReadableName(this MethodBase method)
         {
-            return method.ReadableName("[ext] ");
+            return method.GetReadableName("[ext] ");
         }
 
         public static bool IsExtensionMethod(this MethodBase method)
@@ -99,7 +99,10 @@ namespace Appalachia.Utility.Reflection.Extensions
                    method.IsDefined(typeof(ExtensionAttribute), false);
         }
 
-        public static bool HasParamaters(this MethodInfo methodInfo, IList<Type> paramTypes, bool inherit = true)
+        public static bool HasParamaters(
+            this MethodInfo methodInfo,
+            IList<Type> paramTypes,
+            bool inherit = true)
         {
             var parameters = methodInfo.GetParameters();
             if (parameters.Length != paramTypes.Count)
@@ -109,7 +112,8 @@ namespace Appalachia.Utility.Reflection.Extensions
 
             return !parameters.Where(
                                    (t, index) =>
-                                       (inherit && !paramTypes[index].InheritsFrom(t.ParameterType)) ||
+                                       (inherit &&
+                                        !paramTypes[index].InheritsFrom(t.ParameterType)) ||
                                        (t.ParameterType != paramTypes[index])
                                )
                               .Any();

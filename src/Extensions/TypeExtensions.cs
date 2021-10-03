@@ -3,14 +3,14 @@
 using System;
 using System.Globalization;
 using System.Reflection;
+using Appalachia.Utility.Reflection.Common;
 
 #endregion
 
 namespace Appalachia.Utility.Reflection.Extensions
 {
-    public static class TypeExtensions
+    public static partial class ReflectionExtensions
     {
-
         public static bool IsNullableType(this Type type)
         {
             return !type.IsPrimitive && !type.IsValueType && !type.IsEnum;
@@ -56,5 +56,26 @@ namespace Appalachia.Utility.Reflection.Extensions
                 return false;
             }
         }
+
+        public static bool CanConvert(this Type from, Type to)
+        {
+            if (from == null)
+            {
+                throw new ArgumentNullException(nameof(from));
+            }
+
+            if (to == null)
+            {
+                throw new ArgumentNullException(nameof(to));
+            }
+
+            return (from == to) ||
+                   (to == typeof(object)) ||
+                   (to == typeof(string)) ||
+                   from.IsCastableTo(to) ||
+                   (GenericNumberUtility.IsNumber(from) && GenericNumberUtility.IsNumber(to)) ||
+                   (ConvertUtility.GetCastDelegate(from, to) != null);
+        }
+        
     }
 }

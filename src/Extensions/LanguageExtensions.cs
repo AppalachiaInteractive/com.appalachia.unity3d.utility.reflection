@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace Appalachia.Utility.Reflection.Extensions
 {
-    public static class LanguageExtensions
+    public static partial class ReflectionExtensions
     {
-        private static readonly HashSet<string> CSharpReservedKeywords = new HashSet<string>
+        private static readonly HashSet<string> CSharpReservedKeywords = new()
         {
             "abstract",
             "as",
@@ -86,7 +86,7 @@ namespace Appalachia.Utility.Reflection.Extensions
             "while"
         };
 
-        private static readonly HashSet<string> CSharpContextualKeywords = new HashSet<string>
+        private static readonly HashSet<string> CSharpContextualKeywords = new()
         {
             "add",
             "and",
@@ -166,10 +166,12 @@ namespace Appalachia.Utility.Reflection.Extensions
                     {
                         var str = identifier;
                         var chArray = new[] {'.'};
-                        return str.Split(chArray).All(identifier1 => identifier1.IsValidIdentifier());
+                        return str.Split(chArray)
+                                  .All(identifier1 => identifier1.IsValidIdentifier());
                     }
 
-                    if (identifier.IsCSharpReservedKeyword() || !identifier[0].IsValidIdentifierStartCharacter())
+                    if (identifier.IsCSharpReservedKeyword() ||
+                        !identifier[0].IsValidIdentifierStartCharacter())
                     {
                         return false;
                     }

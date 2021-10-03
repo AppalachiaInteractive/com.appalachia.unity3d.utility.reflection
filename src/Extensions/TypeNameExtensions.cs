@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Appalachia.Utility.Reflection.Extensions
 {
-    public static class TypeNameExtensions
+    public static partial class ReflectionExtensions
     {
-        private static readonly object ReadableNamesCacheLock = new object();
-        private static readonly Dictionary<Type, string> ReadableNamesCache = new Dictionary<Type, string>();
+        private static readonly object ReadableNamesCacheLock = new();
+        private static readonly Dictionary<Type, string> ReadableNamesCache = new();
 
-        private static readonly Dictionary<string, string> TypeNameKeywordAlternatives = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> TypeNameKeywordAlternatives = new()
         {
             {"Single", "float"},
             {"Double", "double"},
@@ -41,10 +41,10 @@ namespace Appalachia.Utility.Reflection.Extensions
             {"Boolean[]", "bool[]"}
         };
 
-        public static string ReadableName(this Type type)
+        public static string GetReadableName(this Type type)
         {
             return type.IsNested && !type.IsGenericParameter
-                ? $"{type.DeclaringType.ReadableName()}.{GetCachedReadableName(type)}"
+                ? $"{type.DeclaringType.GetReadableName()}.{GetCachedReadableName(type)}"
                 : GetCachedReadableName(type);
         }
 
@@ -66,7 +66,7 @@ namespace Appalachia.Utility.Reflection.Extensions
 
         public static string GetSimpleReadableName(this Type type)
         {
-            return type.ReadableName().Replace('<', '_').Replace('>', '_').TrimEnd('_');
+            return type.GetReadableName().Replace('<', '_').Replace('>', '_').TrimEnd('_');
         }
 
         public static string GetSimpleReadableFullName(this Type type)
@@ -79,7 +79,7 @@ namespace Appalachia.Utility.Reflection.Extensions
             if (type.IsArray)
             {
                 var arrayRank = type.GetArrayRank();
-                return type.GetElementType().ReadableName() + (arrayRank == 1 ? "[]" : "[,]");
+                return type.GetElementType().GetReadableName() + (arrayRank == 1 ? "[]" : "[,]");
             }
 
             if (type.InheritsFrom(typeof(Nullable<>)))
@@ -112,7 +112,7 @@ namespace Appalachia.Utility.Reflection.Extensions
                     stringBuilder.Append(", ");
                 }
 
-                stringBuilder.Append(type1.ReadableName());
+                stringBuilder.Append(type1.GetReadableName());
             }
 
             stringBuilder.Append('>');
@@ -122,7 +122,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         private static string GetAlternateTypeNames(this Type type)
         {
             var key = type.Name;
-            var empty = string.Empty;
+            string empty;
             if (TypeNameKeywordAlternatives.TryGetValue(key, out empty))
             {
                 key = empty;

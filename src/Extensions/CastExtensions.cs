@@ -5,113 +5,112 @@ using System.Reflection;
 
 namespace Appalachia.Utility.Reflection.Extensions
 {
-    public static class CastExtensions
+    public static partial class ReflectionExtensions
     {
-        private static readonly object WeaklyTypedTypeCastDelegatesLock = new object();
-        private static readonly object StronglyTypedTypeCastDelegatesLock = new object();
+        private static readonly object WeaklyTypedTypeCastDelegatesLock = new();
+        private static readonly object StronglyTypedTypeCastDelegatesLock = new();
 
-        private static readonly Dictionary<Type, Dictionary<Type, Func<object, object>>> WeaklyTypedTypeCastDelegates =
-            new Dictionary<Type, Dictionary<Type, Func<object, object>>>();
+        private static readonly Dictionary<Type, Dictionary<Type, Func<object, object>>>
+            WeaklyTypedTypeCastDelegates = new();
 
-        private static readonly Dictionary<Type, Dictionary<Type, Delegate>> StronglyTypedTypeCastDelegates =
-            new Dictionary<Type, Dictionary<Type, Delegate>>();
+        private static readonly Dictionary<Type, Dictionary<Type, Delegate>>
+            StronglyTypedTypeCastDelegates = new();
 
         private static readonly Type VoidPointer = typeof(void).MakePointerType();
 
-        private static readonly Dictionary<Type, HashSet<Type>> ImplicitCastsByType =
-            new Dictionary<Type, HashSet<Type>>
+        private static readonly Dictionary<Type, HashSet<Type>> ImplicitCastsByType = new()
+        {
+            {typeof(long), new HashSet<Type> {typeof(float), typeof(double), typeof(decimal)}},
             {
-                {typeof(long), new HashSet<Type> {typeof(float), typeof(double), typeof(decimal)}},
+                typeof(int), new HashSet<Type>
                 {
-                    typeof(int), new HashSet<Type>
-                    {
-                        typeof(decimal),
-                        typeof(double),
-                        typeof(float),
-                        typeof(long)
-                    }
-                },
+                    typeof(decimal),
+                    typeof(double),
+                    typeof(float),
+                    typeof(long)
+                }
+            },
+            {
+                typeof(short), new HashSet<Type>
                 {
-                    typeof(short), new HashSet<Type>
-                    {
-                        typeof(decimal),
-                        typeof(double),
-                        typeof(float),
-                        typeof(int),
-                        typeof(long)
-                    }
-                },
+                    typeof(decimal),
+                    typeof(double),
+                    typeof(float),
+                    typeof(int),
+                    typeof(long)
+                }
+            },
+            {
+                typeof(sbyte), new HashSet<Type>
                 {
-                    typeof(sbyte), new HashSet<Type>
-                    {
-                        typeof(decimal),
-                        typeof(double),
-                        typeof(float),
-                        typeof(int),
-                        typeof(long),
-                        typeof(short)
-                    }
-                },
-                {typeof(ulong), new HashSet<Type> {typeof(float), typeof(double), typeof(decimal)}},
+                    typeof(decimal),
+                    typeof(double),
+                    typeof(float),
+                    typeof(int),
+                    typeof(long),
+                    typeof(short)
+                }
+            },
+            {typeof(ulong), new HashSet<Type> {typeof(float), typeof(double), typeof(decimal)}},
+            {
+                typeof(uint), new HashSet<Type>
                 {
-                    typeof(uint), new HashSet<Type>
-                    {
-                        typeof(decimal),
-                        typeof(double),
-                        typeof(float),
-                        typeof(long),
-                        typeof(ulong)
-                    }
-                },
+                    typeof(decimal),
+                    typeof(double),
+                    typeof(float),
+                    typeof(long),
+                    typeof(ulong)
+                }
+            },
+            {
+                typeof(ushort), new HashSet<Type>
                 {
-                    typeof(ushort), new HashSet<Type>
-                    {
-                        typeof(decimal),
-                        typeof(double),
-                        typeof(float),
-                        typeof(int),
-                        typeof(long),
-                        typeof(uint),
-                        typeof(ulong)
-                    }
-                },
+                    typeof(decimal),
+                    typeof(double),
+                    typeof(float),
+                    typeof(int),
+                    typeof(long),
+                    typeof(uint),
+                    typeof(ulong)
+                }
+            },
+            {
+                typeof(byte), new HashSet<Type>
                 {
-                    typeof(byte), new HashSet<Type>
-                    {
-                        typeof(decimal),
-                        typeof(double),
-                        typeof(float),
-                        typeof(int),
-                        typeof(long),
-                        typeof(short),
-                        typeof(uint),
-                        typeof(ulong),
-                        typeof(ushort)
-                    }
-                },
+                    typeof(decimal),
+                    typeof(double),
+                    typeof(float),
+                    typeof(int),
+                    typeof(long),
+                    typeof(short),
+                    typeof(uint),
+                    typeof(ulong),
+                    typeof(ushort)
+                }
+            },
+            {
+                typeof(char), new HashSet<Type>
                 {
-                    typeof(char), new HashSet<Type>
-                    {
-                        typeof(decimal),
-                        typeof(double),
-                        typeof(float),
-                        typeof(int),
-                        typeof(long),
-                        typeof(uint),
-                        typeof(ulong),
-                        typeof(ushort)
-                    }
-                },
-                {VoidPointer, new HashSet<Type>()},
-                {typeof(IntPtr), new HashSet<Type>()},
-                {typeof(UIntPtr), new HashSet<Type>()},
-                {typeof(bool), new HashSet<Type>()},
-                {typeof(decimal), new HashSet<Type>()},
-                {typeof(double), new HashSet<Type>()},
-                {typeof(float), new HashSet<Type> {typeof(double)}}
-            };
+                    typeof(decimal),
+                    typeof(double),
+                    typeof(float),
+                    typeof(int),
+                    typeof(long),
+                    typeof(uint),
+                    typeof(ulong),
+                    typeof(ushort)
+                }
+            },
+            {VoidPointer, new HashSet<Type>()},
+            {typeof(IntPtr), new HashSet<Type>()},
+            {typeof(UIntPtr), new HashSet<Type>()},
+            {typeof(bool), new HashSet<Type>()},
+            {typeof(decimal), new HashSet<Type>()},
+            {typeof(double), new HashSet<Type>()},
+            {typeof(float), new HashSet<Type> {typeof(double)}}
+        };
 
-        private static readonly HashSet<Type> ExplicitCasts = new HashSet<Type>
+        private static readonly HashSet<Type> ExplicitCasts = new()
         {
             typeof(IntPtr),
             typeof(UIntPtr),
@@ -141,7 +140,8 @@ namespace Appalachia.Utility.Reflection.Extensions
                 return IsCastableTo(Enum.GetUnderlyingType(to), from);
             }
 
-            if ((!from.IsPrimitive && (from != VoidPointer)) || (!to.IsPrimitive && (to != VoidPointer)))
+            if ((!from.IsPrimitive && (from != VoidPointer)) ||
+                (!to.IsPrimitive && (to != VoidPointer)))
             {
                 return from.GetCastMethod(to, requireImplicitCast) != null;
             }
@@ -191,7 +191,9 @@ namespace Appalachia.Utility.Reflection.Extensions
                 throw new ArgumentNullException(nameof(to));
             }
 
-            return (from == to) || to.IsAssignableFrom(from) || from.HasCastDefined(to, requireImplicitCast);
+            return (from == to) ||
+                   to.IsAssignableFrom(from) ||
+                   from.HasCastDefined(to, requireImplicitCast);
         }
 
         public static Func<object, object> GetCastMethodDelegate(
@@ -204,7 +206,10 @@ namespace Appalachia.Utility.Reflection.Extensions
             {
                 if (!WeaklyTypedTypeCastDelegates.TryGetValue(from, out var typeFromDict))
                 {
-                    WeaklyTypedTypeCastDelegates.Add(from, new Dictionary<Type, Func<object, object>>());
+                    WeaklyTypedTypeCastDelegates.Add(
+                        from,
+                        new Dictionary<Type, Func<object, object>>()
+                    );
                     typeFromDict = WeaklyTypedTypeCastDelegates[from];
                 }
 
@@ -225,14 +230,21 @@ namespace Appalachia.Utility.Reflection.Extensions
             return func;
         }
 
-        public static Func<TFrom, TTo> GetCastMethodDelegate<TFrom, TTo>(bool requireImplicitCast = false)
+        public static Func<TFrom, TTo> GetCastMethodDelegate<TFrom, TTo>(
+            bool requireImplicitCast = false)
         {
             Delegate deleg;
             lock (StronglyTypedTypeCastDelegatesLock)
             {
-                if (!StronglyTypedTypeCastDelegates.TryGetValue(typeof(TFrom), out var typeFromDict))
+                if (!StronglyTypedTypeCastDelegates.TryGetValue(
+                    typeof(TFrom),
+                    out var typeFromDict
+                ))
                 {
-                    StronglyTypedTypeCastDelegates.Add(typeof(TFrom), new Dictionary<Type, Delegate>());
+                    StronglyTypedTypeCastDelegates.Add(
+                        typeof(TFrom),
+                        new Dictionary<Type, Delegate>()
+                    );
                     typeFromDict = StronglyTypedTypeCastDelegates[typeof(TFrom)];
                 }
 
@@ -253,9 +265,14 @@ namespace Appalachia.Utility.Reflection.Extensions
             return (Func<TFrom, TTo>) deleg;
         }
 
-        public static MethodInfo GetCastMethod(this Type from, Type to, bool requireImplicitCast = false)
+        public static MethodInfo GetCastMethod(
+            this Type from,
+            Type to,
+            bool requireImplicitCast = false)
         {
-            foreach (var allMember in from.GetTypeMembersMatchingType<MethodInfo>(BindingFlags.Static | BindingFlags.Public))
+            foreach (var allMember in from.GetTypeMembersMatchingType<MethodInfo>(
+                BindingFlags.Static | BindingFlags.Public
+            ))
             {
                 if (((allMember.Name == "op_Implicit") ||
                      (!requireImplicitCast && (allMember.Name == "op_Explicit"))) &&
@@ -265,13 +282,14 @@ namespace Appalachia.Utility.Reflection.Extensions
                 }
             }
 
-            return to.GetTypeMembersMatchingType<MethodInfo>(BindingFlags.Static | BindingFlags.Public)
-                     .FirstOrDefault(
-                          allMember =>
-                              ((allMember.Name == "op_Implicit") ||
-                               (!requireImplicitCast && (allMember.Name == "op_Explicit"))) &&
-                              allMember.GetParameters()[0].ParameterType.IsAssignableFrom(from)
-                      );
+            return to
+                  .GetTypeMembersMatchingType<MethodInfo>(BindingFlags.Static | BindingFlags.Public)
+                  .FirstOrDefault(
+                       allMember =>
+                           ((allMember.Name == "op_Implicit") ||
+                            (!requireImplicitCast && (allMember.Name == "op_Explicit"))) &&
+                           allMember.GetParameters()[0].ParameterType.IsAssignableFrom(from)
+                   );
         }
     }
 }

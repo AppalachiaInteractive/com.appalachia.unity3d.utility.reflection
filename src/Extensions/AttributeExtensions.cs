@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Appalachia.Utility.Reflection.Extensions
 {
-    public static class AttributeExtensions
+    public static partial class ReflectionExtensions
     {
         public static T GetAttribute<T>(this MemberInfo type, bool inherit)
             where T : Attribute
@@ -38,7 +38,7 @@ namespace Appalachia.Utility.Reflection.Extensions
         {
             return type.GetCustomAttributes(typeof(T), inherit).Cast<T>();
         }
-        
+
         public static bool HasAttribute<T>(this MemberInfo member)
             where T : Attribute
         {
@@ -51,7 +51,10 @@ namespace Appalachia.Utility.Reflection.Extensions
             return member.IsDefined(typeof(T), inherit);
         }
 
-        public static object[] SafeGetCustomAttributes(this Assembly assembly, Type type, bool inherit)
+        public static object[] SafeGetCustomAttributes(
+            this Assembly assembly,
+            Type type,
+            bool inherit)
         {
             try
             {

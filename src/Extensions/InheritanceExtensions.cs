@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Appalachia.Utility.Reflection.Extensions
 {
-    public static class InheritanceExtensions
+    public static partial class ReflectionExtensions
     {
         private static Dictionary<Type, List<Type>> _totalLookup;
         private static Dictionary<Type, List<Type>> _concreteLookup;
@@ -172,13 +172,16 @@ namespace Appalachia.Utility.Reflection.Extensions
 
             if (!type.InheritsFrom(baseType))
             {
-                throw new ArgumentException($"Type {type.Name} does not inherit from {baseType.Name}.");
+                throw new ArgumentException(
+                    $"Type {type.Name} does not inherit from {baseType.Name}."
+                );
             }
 
             var type1 = type;
             depthCount = 0;
             for (;
-                (type1 != null) && (!type1.IsGenericType || (type1.GetGenericTypeDefinition() != baseType));
+                (type1 != null) &&
+                (!type1.IsGenericType || (type1.GetGenericTypeDefinition() != baseType));
                 type1 = type1.BaseType)
             {
                 ++depthCount;
