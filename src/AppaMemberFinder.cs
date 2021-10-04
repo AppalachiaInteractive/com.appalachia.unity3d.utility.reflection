@@ -18,57 +18,37 @@ namespace Appalachia.Utility.Reflection
         private bool returnTypeCanInherit;
         private Type type;
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="T:Sirenix.Utilities.AppaMemberFinder" /> class.
-        /// </summary>
         public AppaMemberFinder()
         {
         }
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="T:Sirenix.Utilities.AppaMemberFinder" /> class.
-        /// </summary>
         public AppaMemberFinder(Type type)
         {
             InitializeFor(type);
         }
 
-        /// <summary>
-        ///     <para>Find members of the given type, while providing good error messages based on the following search filters provided.</para>
-        /// </summary>
         public static AppaMemberFinder Start<T>()
         {
             return new AppaMemberFinder().InitializeFor(typeof(T));
         }
 
-        /// <summary>
-        ///     <para>Find members of the given type, while providing good error messages based on the following search filters provided.</para>
-        /// </summary>
         public static AppaMemberFinder Start(Type type)
         {
             return new AppaMemberFinder().InitializeFor(type);
         }
 
-        /// <summary>Can be true for both fields, properties and methods.</summary>
-        /// <returns></returns>
         public AppaMemberFinder HasNoParameters()
         {
             conditionFlags |= ConditionFlags.HasNoParamaters;
             return this;
         }
 
-        /// <summary>Exclude members found in base-types.</summary>
         public AppaMemberFinder IsDeclaredOnly()
         {
             conditionFlags |= ConditionFlags.IsDeclaredOnly;
             return this;
         }
 
-        /// <summary>
-        ///     <para>Only include methods with the following parameter.</para>
-        ///     <para>Calling this will also exclude fields and properties.</para>
-        ///     <para>Parameter type inheritance is supported.</para>
-        /// </summary>
         public AppaMemberFinder HasParameters(Type param1)
         {
             conditionFlags |= ConditionFlags.IsMethod;
@@ -76,11 +56,6 @@ namespace Appalachia.Utility.Reflection
             return this;
         }
 
-        /// <summary>
-        ///     <para>Only include methods with the following parameters.</para>
-        ///     <para>Calling this will also exclude fields and properties.</para>
-        ///     <para>Parameter type inheritance is supported.</para>
-        /// </summary>
         public AppaMemberFinder HasParameters(Type param1, Type param2)
         {
             conditionFlags |= ConditionFlags.IsMethod;
@@ -89,11 +64,6 @@ namespace Appalachia.Utility.Reflection
             return this;
         }
 
-        /// <summary>
-        ///     <para>Only include methods with the following parameters.</para>
-        ///     <para>Calling this will also exclude fields and properties.</para>
-        ///     <para>Parameter type inheritance is supported.</para>
-        /// </summary>
         public AppaMemberFinder HasParameters(Type param1, Type param2, Type param3)
         {
             conditionFlags |= ConditionFlags.IsMethod;
@@ -103,11 +73,6 @@ namespace Appalachia.Utility.Reflection
             return this;
         }
 
-        /// <summary>
-        ///     <para>Only include methods with the following parameters.</para>
-        ///     <para>Calling this will also exclude fields and properties.</para>
-        ///     <para>Parameter type inheritance is supported.</para>
-        /// </summary>
         public AppaMemberFinder HasParameters(Type param1, Type param2, Type param3, Type param4)
         {
             conditionFlags |= ConditionFlags.IsMethod;
@@ -118,49 +83,26 @@ namespace Appalachia.Utility.Reflection
             return this;
         }
 
-        /// <summary>
-        ///     <para>Only include methods with the following parameters.</para>
-        ///     <para>Calling this will also exclude fields and properties.</para>
-        ///     <para>Parameter type inheritance is supported.</para>
-        /// </summary>
         public AppaMemberFinder HasParameters<T>()
         {
             return HasParameters(typeof(T));
         }
 
-        /// <summary>
-        ///     <para>Only include methods with the following parameters.</para>
-        ///     <para>Calling this will also exclude fields and properties.</para>
-        ///     <para>Parameter type inheritance is supported.</para>
-        /// </summary>
         public AppaMemberFinder HasParameters<T1, T2>()
         {
             return HasParameters(typeof(T1), typeof(T2));
         }
 
-        /// <summary>
-        ///     <para>Only include methods with the following parameters.</para>
-        ///     <para>Calling this will also exclude fields and properties.</para>
-        ///     <para>Parameter type inheritance is supported.</para>
-        /// </summary>
         public AppaMemberFinder HasParameters<T1, T2, T3>()
         {
             return HasParameters(typeof(T1), typeof(T2), typeof(T3));
         }
 
-        /// <summary>
-        ///     <para>Only include methods with the following parameters.</para>
-        ///     <para>Calling this will also exclude fields and properties.</para>
-        ///     <para>Parameter type inheritance is supported.</para>
-        /// </summary>
         public AppaMemberFinder HasParameters<T1, T2, T3, T4>()
         {
             return HasParameters(typeof(T1), typeof(T2), typeof(T3), typeof(T4));
         }
 
-        /// <summary>
-        ///     Determines whether [has return type] [the specified return type].
-        /// </summary>
         public AppaMemberFinder HasReturnType(Type returnType, bool inherit = false)
         {
             returnTypeCanInherit = inherit;
@@ -168,7 +110,6 @@ namespace Appalachia.Utility.Reflection
             return this;
         }
 
-        /// <summary>Can be true for both fields, properties and methods.</summary>
         public AppaMemberFinder HasReturnType<T>(bool inherit = false)
         {
             return HasReturnType(typeof(T), inherit);
@@ -190,7 +131,6 @@ namespace Appalachia.Utility.Reflection
             return this;
         }
 
-        /// <summary>Calls IsField() and IsProperty().</summary>
         public AppaMemberFinder IsFieldOrProperty()
         {
             IsField();
@@ -198,94 +138,60 @@ namespace Appalachia.Utility.Reflection
             return this;
         }
 
-        /// <summary>
-        ///     Only include static members. By default, both static and non-static members are included.
-        /// </summary>
         public AppaMemberFinder IsStatic()
         {
             conditionFlags |= ConditionFlags.IsStatic;
             return this;
         }
 
-        /// <summary>
-        ///     Only include non-static members. By default, both static and non-static members are included.
-        /// </summary>
         public AppaMemberFinder IsInstance()
         {
             conditionFlags |= ConditionFlags.IsInstance;
             return this;
         }
 
-        /// <summary>Specify the name of the member.</summary>
         public AppaMemberFinder IsNamed(string name)
         {
             this.name = name;
             return this;
         }
 
-        /// <summary>
-        ///     <para>Excludes fields and methods if nether IsField() or IsMethod() is called. Otherwise includes properties.</para>
-        ///     <para>By default, all member types are included.</para>
-        /// </summary>
         public AppaMemberFinder IsProperty()
         {
             conditionFlags |= ConditionFlags.IsProperty;
             return this;
         }
 
-        /// <summary>
-        ///     <para>Excludes fields and properties if nether IsField() or IsProperty() is called. Otherwise includes methods.</para>
-        ///     <para>By default, all member types are included.</para>
-        /// </summary>
         public AppaMemberFinder IsMethod()
         {
             conditionFlags |= ConditionFlags.IsMethod;
             return this;
         }
 
-        /// <summary>
-        ///     <para>Excludes properties and methods if nether IsProperty() or IsMethod() is called. Otherwise includes fields.</para>
-        ///     <para>By default, all member types are included.</para>
-        /// </summary>
         public AppaMemberFinder IsField()
         {
             conditionFlags |= ConditionFlags.IsField;
             return this;
         }
 
-        /// <summary>
-        ///     <para>Excludes non-public members if IsNonPublic() has not yet been called. Otherwise includes public members.</para>
-        ///     <para>By default, both public and non-public members are included.</para>
-        /// </summary>
         public AppaMemberFinder IsPublic()
         {
             conditionFlags |= ConditionFlags.IsPublic;
             return this;
         }
 
-        /// <summary>
-        ///     <para>Excludes public members if IsPublic() has not yet been called. Otherwise includes non-public members.</para>
-        ///     <para>By default, both public and non-public members are included.</para>
-        /// </summary>
         public AppaMemberFinder IsNonPublic()
         {
             conditionFlags |= ConditionFlags.IsNonPublic;
             return this;
         }
 
-        /// <summary>
-        ///     Excludes fields and properties, and only includes methods with a return type of void.
-        /// </summary>
         public AppaMemberFinder ReturnsVoid()
         {
             conditionFlags |= ConditionFlags.IsMethod;
             return HasReturnType(typeof(void));
         }
 
-        /// <summary>
-        ///     <para>Gets the member based on the search filters provided</para>
-        ///     <para>Returns null if no member was found.</para>
-        /// </summary>
         public T GetMember<T>()
             where T : MemberInfo
         {
@@ -293,9 +199,6 @@ namespace Appalachia.Utility.Reflection
             return GetMember<T>(out errorMessage);
         }
 
-        /// <summary>
-        ///     <para>Gets the member based on the search filters provided, and provides a proper error message if no members was found.</para>
-        /// </summary>
         public T GetMember<T>(out string errorMessage)
             where T : MemberInfo
         {
@@ -304,9 +207,6 @@ namespace Appalachia.Utility.Reflection
             return memberInfo;
         }
 
-        /// <summary>
-        ///     <para>Gets the member based on the search filters provided, and provides a proper error message if no members was found.</para>
-        /// </summary>
         public MemberInfo GetMember(out string errorMessage)
         {
             MemberInfo memberInfo;
@@ -314,9 +214,6 @@ namespace Appalachia.Utility.Reflection
             return memberInfo;
         }
 
-        /// <summary>
-        ///     <para>Try gets the member based on the search filters provided, and provides a proper error message if no members was found.</para>
-        /// </summary>
         public bool TryGetMember<T>(out T memberInfo, out string errorMessage)
             where T : MemberInfo
         {
@@ -326,9 +223,6 @@ namespace Appalachia.Utility.Reflection
             return member;
         }
 
-        /// <summary>
-        ///     <para>Try gets the member based on the search filters provided, and provides a proper error message if no members was found.</para>
-        /// </summary>
         public bool TryGetMember(out MemberInfo memberInfo, out string errorMessage)
         {
             MemberInfo[] memberInfos;
@@ -342,9 +236,6 @@ namespace Appalachia.Utility.Reflection
             return false;
         }
 
-        /// <summary>
-        ///     <para>Try gets all members based on the search filters provided, and provides a proper error message if no members was found.</para>
-        /// </summary>
         public bool TryGetMembers(out MemberInfo[] memberInfos, out string errorMessage)
         {
             var source1 = Enumerable.Empty<MemberInfo>();
