@@ -12,18 +12,30 @@ namespace Appalachia.Utility.Reflection
         // Show a PropertyField with a greyed-out default text if the field is empty and not being edited.
         // This is meant to communicate the fact that filling these properties is optional and that Unity will
         // use reasonable defaults if left empty.
-        public static void PropertyFieldWithDefaultText(this SerializedProperty prop, GUIContent label, string defaultText)
+        public static void PropertyFieldWithDefaultText(
+            this SerializedProperty prop,
+            GUIContent label,
+            string defaultText)
         {
             GUI.SetNextControlName(label.text);
             var rt = GUILayoutUtility.GetRect(label, GUI.skin.textField);
 
             EditorGUI.PropertyField(rt, prop, label);
-            if (string.IsNullOrEmpty(prop.stringValue) && GUI.GetNameOfFocusedControl() != label.text && Event.current.type == EventType.Repaint)
+            if (string.IsNullOrEmpty(prop.stringValue) &&
+                (GUI.GetNameOfFocusedControl() != label.text) &&
+                (Event.current.type == EventType.Repaint))
             {
                 using (new EditorGUI.DisabledScope(true))
                 {
                     rt.xMin += EditorGUIUtility.labelWidth;
-                    GUI.skin.textField.Draw(rt, new GUIContent(defaultText), false, false, false, false);
+                    GUI.skin.textField.Draw(
+                        rt,
+                        new GUIContent(defaultText),
+                        false,
+                        false,
+                        false,
+                        false
+                    );
                 }
             }
         }
@@ -33,12 +45,16 @@ namespace Appalachia.Utility.Reflection
             var path = property.propertyPath;
             var lastDot = path.LastIndexOf('.');
             if (lastDot == -1)
+            {
                 return null;
+            }
+
             var parentPath = path.Substring(0, lastDot);
             return property.serializedObject.FindProperty(parentPath);
         }
 
-        public static SerializedProperty GetArrayPropertyFromElement(this SerializedProperty property)
+        public static SerializedProperty GetArrayPropertyFromElement(
+            this SerializedProperty property)
         {
             // Arrays have a structure of 'arrayName.Array.data[index]'.
             // Given property should be element and thus 'data[index]'.
@@ -51,12 +67,22 @@ namespace Appalachia.Utility.Reflection
         {
             var propertyPath = property.propertyPath;
             if (propertyPath[propertyPath.Length - 1] != ']')
+            {
                 return -1;
+            }
+
             var lastIndexOfLeftBracket = propertyPath.LastIndexOf('[');
             if (int.TryParse(
-                propertyPath.Substring(lastIndexOfLeftBracket + 1, propertyPath.Length - lastIndexOfLeftBracket - 2),
-                out var index))
+                propertyPath.Substring(
+                    lastIndexOfLeftBracket + 1,
+                    propertyPath.Length - lastIndexOfLeftBracket - 2
+                ),
+                out var index
+            ))
+            {
                 return index;
+            }
+
             return -1;
         }
 
@@ -66,8 +92,12 @@ namespace Appalachia.Utility.Reflection
 
             var fieldType = property.GetFieldType();
             if (fieldType == null)
-                throw new ArgumentException($"Cannot determine managed field type of {property.propertyPath}",
-                    nameof(property));
+            {
+                throw new ArgumentException(
+                    $"Cannot determine managed field type of {property.propertyPath}",
+                    nameof(property)
+                );
+            }
 
             return fieldType.GetElementType();
         }
@@ -83,23 +113,25 @@ namespace Appalachia.Utility.Reflection
             else if (property.hasChildren && !isString)
             {
                 foreach (var child in property.GetChildren())
+                {
                     ResetValuesToDefault(child);
+                }
             }
             else
             {
                 switch (property.propertyType)
                 {
                     case SerializedPropertyType.Float:
-                        property.floatValue = default(float);
+                        property.floatValue = default;
                         break;
 
                     case SerializedPropertyType.Boolean:
-                        property.boolValue = default(bool);
+                        property.boolValue = default;
                         break;
 
                     case SerializedPropertyType.Enum:
                     case SerializedPropertyType.Integer:
-                        property.intValue = default(int);
+                        property.intValue = default;
                         break;
 
                     case SerializedPropertyType.String:
@@ -115,7 +147,7 @@ namespace Appalachia.Utility.Reflection
 
         public static string ToJson(this SerializedObject serializedObject)
         {
-            return JsonUtility.ToJson(serializedObject, prettyPrint: true);
+            return JsonUtility.ToJson(serializedObject, true);
         }
 
         // The following is functionality that allows turning Unity data into text and text
@@ -125,37 +157,46 @@ namespace Appalachia.Utility.Reflection
         // but not for parts of serialized objects.
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Converting entire objects to JSON is easy using Unity's serialization system but we cannot
-        /// easily convert just a part of the serialized graph to JSON (or any text format for that matter)
-        /// and then recreate the same data from text through SerializedProperties. This method helps by manually
-        /// turning an arbitrary part of a graph into JSON which can then be used with <see cref="RestoreFromJson"/>
-        /// to write the data back into an existing property.
-        ///
-        /// The primary use for this is copy-paste where serialized data needs to be stored in
-        /// <see cref="EditorGUIUtility.systemCopyBuffer"/>.
+        ///     Converting entire objects to JSON is easy using Unity's serialization system but we cannot
+        ///     easily convert just a part of the serialized graph to JSON (or any text format for that matter)
+        ///     and then recreate the same data from text through SerializedProperties. This method helps by manually
+        ///     turning an arbitrary part of a graph into JSON which can then be used with <see cref="RestoreFromJson" />
+        ///     to write the data back into an existing property.
+        ///     The primary use for this is copy-paste where serialized data needs to be stored in
+        ///     <see cref="EditorGUIUtility.systemCopyBuffer" />.
         /// </remarks>
-        public static string CopyToJson(this SerializedProperty property, bool ignoreObjectReferences = false)
+        public static string CopyToJson(
+            this SerializedProperty property,
+            bool ignoreObjectReferences = false)
         {
             var buffer = new StringBuilder();
             CopyToJson(property, buffer, ignoreObjectReferences);
             return buffer.ToString();
         }
 
-        public static void CopyToJson(this SerializedProperty property, StringBuilder buffer, bool ignoreObjectReferences = false)
+        public static void CopyToJson(
+            this SerializedProperty property,
+            StringBuilder buffer,
+            bool ignoreObjectReferences = false)
         {
-            CopyToJson(property, buffer, noPropertyName: true, ignoreObjectReferences: ignoreObjectReferences);
+            CopyToJson(property, buffer, true, ignoreObjectReferences);
         }
 
-        private static void CopyToJson(this SerializedProperty property, StringBuilder buffer, bool noPropertyName, bool ignoreObjectReferences)
+        private static void CopyToJson(
+            this SerializedProperty property,
+            StringBuilder buffer,
+            bool noPropertyName,
+            bool ignoreObjectReferences)
         {
             var propertyType = property.propertyType;
-            if (ignoreObjectReferences && propertyType == SerializedPropertyType.ObjectReference)
+            if (ignoreObjectReferences && (propertyType == SerializedPropertyType.ObjectReference))
+            {
                 return;
+            }
 
             // Property name.
             if (!noPropertyName)
@@ -178,13 +219,21 @@ namespace Appalachia.Utility.Reflection
                 for (var i = 0; i < arraySize; ++i)
                 {
                     var element = property.GetArrayElementAtIndex(i);
-                    if (ignoreObjectReferences && element.propertyType == SerializedPropertyType.ObjectReference)
+                    if (ignoreObjectReferences &&
+                        (element.propertyType == SerializedPropertyType.ObjectReference))
+                    {
                         continue;
+                    }
+
                     if (!isFirst)
+                    {
                         buffer.Append(',');
+                    }
+
                     CopyToJson(element, buffer, true, ignoreObjectReferences);
                     isFirst = false;
                 }
+
                 buffer.Append(']');
             }
             else if (property.hasChildren && !isString)
@@ -195,13 +244,21 @@ namespace Appalachia.Utility.Reflection
                 var isFirst = true;
                 foreach (var child in property.GetChildren())
                 {
-                    if (ignoreObjectReferences && child.propertyType == SerializedPropertyType.ObjectReference)
+                    if (ignoreObjectReferences &&
+                        (child.propertyType == SerializedPropertyType.ObjectReference))
+                    {
                         continue;
+                    }
+
                     if (!isFirst)
+                    {
                         buffer.Append(',');
+                    }
+
                     CopyToJson(child, buffer, false, ignoreObjectReferences);
                     isFirst = false;
                 }
+
                 buffer.Append('}');
             }
             else
@@ -225,26 +282,38 @@ namespace Appalachia.Utility.Reflection
 
                     case SerializedPropertyType.Boolean:
                         if (property.boolValue)
+                        {
                             buffer.Append("true");
+                        }
                         else
+                        {
                             buffer.Append("false");
+                        }
+
                         break;
 
                     ////TODO: other property types
                     default:
-                        throw new NotImplementedException($"Support for {property.propertyType} property type");
+                        throw new NotImplementedException(
+                            $"Support for {property.propertyType} property type"
+                        );
                 }
             }
         }
-        
+
         /// <summary>
-        /// For every character in <paramref name="str"/> that is contained in <paramref name="chars"/>, replace it
-        /// by the corresponding character in <paramref name="replacements"/> preceded by a backslash.
+        ///     For every character in <paramref name="str" /> that is contained in <paramref name="chars" />, replace it
+        ///     by the corresponding character in <paramref name="replacements" /> preceded by a backslash.
         /// </summary>
-        public static string Escape(this string str, string chars = "\n\t\r\\\"", string replacements = "ntr\\\"")
+        public static string Escape(
+            this string str,
+            string chars = "\n\t\r\\\"",
+            string replacements = "ntr\\\"")
         {
             if (str == null)
+            {
                 return null;
+            }
 
             // Scan for characters that need escaping. If there's none, just return
             // string as is.
@@ -257,8 +326,11 @@ namespace Appalachia.Utility.Reflection
                     break;
                 }
             }
+
             if (!hasCharacterThatNeedsEscaping)
+            {
                 return str;
+            }
 
             var builder = new StringBuilder();
             foreach (var ch in str)
@@ -274,28 +346,36 @@ namespace Appalachia.Utility.Reflection
                     builder.Append(replacements[index]);
                 }
             }
+
             return builder.ToString();
         }
 
         public static bool Contains(this string str, char ch)
         {
             if (str == null)
+            {
                 return false;
+            }
+
             return str.IndexOf(ch) != -1;
         }
 
         public static bool Contains(this string str, string text, StringComparison comparison)
         {
             if (str == null)
+            {
                 return false;
+            }
+
             return str.IndexOf(text, comparison) != -1;
         }
-
 
         public static IEnumerable<SerializedProperty> GetChildren(this SerializedProperty property)
         {
             if (!property.hasChildren)
+            {
                 yield break;
+            }
 
             using (var iter = property.Copy())
             {
@@ -303,14 +383,18 @@ namespace Appalachia.Utility.Reflection
 
                 // Go to first child.
                 if (!iter.Next(true))
+                {
                     yield break; // Shouldn't happen; we've already established we have children.
+                }
 
                 // Iterate over children.
                 while (!SerializedProperty.EqualContents(iter, end))
                 {
                     yield return iter;
                     if (!iter.Next(false))
+                    {
                         break;
+                    }
                 }
             }
         }
@@ -325,10 +409,12 @@ namespace Appalachia.Utility.Reflection
             foreach (var component in pathComponents)
             {
                 // Handle arrays. They are followed by "Array" and "data[N]" elements.
-                if (result != null && currentSerializableType.IsArray)
+                if ((result != null) && currentSerializableType.IsArray)
                 {
                     if (component == "Array")
+                    {
                         continue;
+                    }
 
                     if (component.StartsWith("data["))
                     {
@@ -337,10 +423,18 @@ namespace Appalachia.Utility.Reflection
                     }
                 }
 
-                result = currentSerializableType.GetField(component,
-                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+                result = currentSerializableType.GetField(
+                    component,
+                    BindingFlags.Instance |
+                    BindingFlags.NonPublic |
+                    BindingFlags.Public |
+                    BindingFlags.FlattenHierarchy
+                );
                 if (result == null)
+                {
                     return null;
+                }
+
                 currentSerializableType = result.FieldType;
             }
 
@@ -352,12 +446,16 @@ namespace Appalachia.Utility.Reflection
             return GetField(property)?.FieldType;
         }
 
-        public static void SetStringValue(this SerializedProperty property, string propertyName, string value)
+        public static void SetStringValue(
+            this SerializedProperty property,
+            string propertyName,
+            string value)
         {
             var propertyRelative = property?.FindPropertyRelative(propertyName);
             if (propertyRelative != null)
+            {
                 propertyRelative.stringValue = value;
+            }
         }
-    
     }
 }

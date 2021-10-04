@@ -76,6 +76,5 @@ namespace Appalachia.Utility.Reflection.Extensions
                    (GenericNumberUtility.IsNumber(from) && GenericNumberUtility.IsNumber(to)) ||
                    (ConvertUtility.GetCastDelegate(from, to) != null);
         }
-        
     }
 }

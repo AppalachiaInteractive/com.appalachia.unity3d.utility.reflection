@@ -13,7 +13,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         {
             return (Action) Delegate.CreateDelegate(typeof(Action), method);
         }
-        
+
         public static Action CreateDelegate(
             Type t,
             string methodName,
