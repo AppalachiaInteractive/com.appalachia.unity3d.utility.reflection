@@ -12,6 +12,12 @@
 ## Releasing
 | Hash | Date | Author | Changes |
 |------|------|--------|---------|
+| 4fabfc4e9d6dbe3157d32b6545e8e658a1527724 | 2021-10-03 | Chris Schubert | Organizing Appalachia packages for package management |
+
+
+ ## Tag: `v0.1.3`
+| Hash | Date | Author | Changes |
+|------|------|--------|---------|
 | 7f9199d7a8dddb12895b026dba5f33878bc400e0 | 2021-07-29 | Chris Schubert | Updates |
 
 
