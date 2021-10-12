@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -8,6 +7,9 @@ namespace Appalachia.Utility.Reflection.Extensions
 {
     public static partial class ReflectionExtensions
     {
+        private static Dictionary<MemberInfo, bool> _isStaticLookup;
+        private static Dictionary<Type, MemberInfo[]> _TYPE_MEMBER_BASIC_CACHE;
+
         public static IEnumerable<T> GetTypeMembersMatchingType<T>(
             this Type type,
             BindingFlags flags = BindingFlags.Default)
@@ -188,33 +190,11 @@ namespace Appalachia.Utility.Reflection.Extensions
             return GetTypeMembersByMemberType(type, flags, MemberTypes.Property, MemberTypes.Field);
         }
 
-        public static bool IsStatic(this MemberInfo member)
+        public static bool IsStatic_CACHE(this MemberInfo member)
         {
-            switch (member)
-            {
-                case FieldInfo fieldInfo:
-                    return fieldInfo.IsStatic;
-                case PropertyInfo propertyInfo:
-                    return !propertyInfo.CanRead
-                        ? propertyInfo.GetSetMethod(true).IsStatic
-                        : propertyInfo.GetGetMethod(true).IsStatic;
-                case MethodBase methodBase:
-                    return methodBase.IsStatic;
-                case EventInfo eventInfo:
-                    return eventInfo.GetRaiseMethod(true).IsStatic;
-                case Type type:
-                    return type.IsSealed && type.IsAbstract;
-                default:
-                    throw new NotSupportedException(
-                        string.Format(
-                            CultureInfo.InvariantCulture,
-                            "Unable to determine IsStatic for member {0}.{1}MemberType was {2} but only fields, properties, methods, events and types are supported.",
-                            member.DeclaringType.FullName,
-                            member.Name,
-                            member.GetType().FullName
-                        )
-                    );
-            }
+            return _MEMBER_STATIC_LOOKUP_CACHE[member];
         }
+        
+        
     }
 }

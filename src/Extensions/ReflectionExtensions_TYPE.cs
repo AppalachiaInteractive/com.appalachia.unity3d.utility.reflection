@@ -33,18 +33,6 @@ namespace Appalachia.Utility.Reflection.Extensions
             }
         }
 
-        public static Type[] SafeGetTypes(this Assembly assembly)
-        {
-            try
-            {
-                return assembly.GetTypes();
-            }
-            catch
-            {
-                return Type.EmptyTypes;
-            }
-        }
-
         public static bool SafeIsDefined(this Assembly assembly, Type attribute, bool inherit)
         {
             try

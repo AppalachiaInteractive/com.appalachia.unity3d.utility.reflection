@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Appalachia.Utility.Reflection.Extensions;
 
 namespace Appalachia.Utility.Reflection.Delegated
 {
@@ -12,7 +13,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         public Function(
             T instance,
             string method,
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic)
+            BindingFlags flags = ReflectionExtensions.PrivateInstance)
         {
             _hashCode = instance.GetHashCode();
 
@@ -32,7 +33,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         public Function(
             T instance,
             string method,
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic)
+            BindingFlags flags = ReflectionExtensions.PrivateInstance)
         {
             _hashCode = instance.GetHashCode();
 
@@ -56,7 +57,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         public Function(
             T instance,
             string method,
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic)
+            BindingFlags flags = ReflectionExtensions.PrivateInstance)
         {
             _hashCode = instance.GetHashCode();
 
@@ -80,7 +81,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         public Function(
             T instance,
             string method,
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic)
+            BindingFlags flags = ReflectionExtensions.PrivateInstance)
         {
             _hashCode = instance.GetHashCode();
 
@@ -104,7 +105,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         public Function(
             T instance,
             string method,
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic)
+            BindingFlags flags = ReflectionExtensions.PrivateInstance)
         {
             _hashCode = instance.GetHashCode();
 
@@ -128,7 +129,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         public Function(
             T instance,
             string method,
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic)
+            BindingFlags flags = ReflectionExtensions.PrivateInstance)
         {
             _hashCode = instance.GetHashCode();
 
@@ -152,7 +153,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         public Function(
             T instance,
             string method,
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic)
+            BindingFlags flags = ReflectionExtensions.PrivateInstance)
         {
             _hashCode = instance.GetHashCode();
 
@@ -176,7 +177,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         public Function(
             T instance,
             string method,
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic)
+            BindingFlags flags = ReflectionExtensions.PrivateInstance)
         {
             _hashCode = instance.GetHashCode();
 
@@ -202,7 +203,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         public Function(
             T instance,
             string method,
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic)
+            BindingFlags flags = ReflectionExtensions.PrivateInstance)
         {
             _hashCode = instance.GetHashCode();
 
@@ -228,7 +229,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         public Function(
             T instance,
             string method,
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic)
+            BindingFlags flags = ReflectionExtensions.PrivateInstance)
         {
             _hashCode = instance.GetHashCode();
 
@@ -254,7 +255,7 @@ namespace Appalachia.Utility.Reflection.Delegated
         public Function(
             T instance,
             string method,
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic)
+            BindingFlags flags = ReflectionExtensions.PrivateInstance)
         {
             _hashCode = instance.GetHashCode();
 

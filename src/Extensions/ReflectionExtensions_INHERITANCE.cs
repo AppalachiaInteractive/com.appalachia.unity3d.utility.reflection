@@ -80,27 +80,20 @@ namespace Appalachia.Utility.Reflection.Extensions
         private static List<Type> GetInheritors(Type t, bool concreteOnly)
         {
             var list = new List<Type>();
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var types = GetAllTypes();
 
-            for (var index = 0; index < assemblies.Length; index++)
+            for (var i = 0; i < types.Length; i++)
             {
-                var domainAssembly = assemblies[index];
+                var assemblyType = types[i];
 
-                var assemblyTypes = domainAssembly.GetTypes();
-
-                for (var i = 0; i < assemblyTypes.Length; i++)
+                if (t.IsAssignableFrom(assemblyType))
                 {
-                    var assemblyType = assemblyTypes[i];
-
-                    if (t.IsAssignableFrom(assemblyType))
+                    if (concreteOnly && assemblyType.IsAbstract)
                     {
-                        if (concreteOnly && assemblyType.IsAbstract)
-                        {
-                            continue;
-                        }
-
-                        list.Add(assemblyType);
+                        continue;
                     }
+
+                    list.Add(assemblyType);
                 }
             }
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Appalachia.Utility.Reflection.Extensions;
 
@@ -8,30 +7,35 @@ namespace Appalachia.Utility.Reflection
 {
     public static class AppaTypeFinder
     {
-        public static Type FindTypeByFields<T>(IEnumerable<string> fieldNames, out float likelihood)
-        where T : class
+        public static List<AppaTypeFinderResult> FindTypeByFields<T>(IEnumerable<string> fieldNames)
+            where T : class
         {
-            return FindTypeByFields(fieldNames, out likelihood, typeof(T));
+            return FindTypeByFields(fieldNames, typeof(T));
         }
-        
-        public static Type FindTypeByFields(IEnumerable<string> fieldNames, out float likelihood, Type inheritsFrom = null)
+
+        public static List<AppaTypeFinderResult> FindTypeByFields(
+            IEnumerable<string> fieldNames,
+            Type inheritsFrom = null)
         {
+            
             var fieldNameHash = new HashSet<string>(fieldNames);
 
-            var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes());
+            var fieldCount = fieldNameHash.Count;
 
-            Type bestMatch = null;
-            var fieldCount = 0;
-            var bestMatchCount = 0;
+            var types = ReflectionExtensions.GetAllTypes();
+
+            var matches = new List<AppaTypeFinderResult>();
 
             foreach (var type in types)
             {
-                if (inheritsFrom != null && !type.InheritsFrom(inheritsFrom))
+                if ((inheritsFrom != null) && !type.InheritsFrom(inheritsFrom))
                 {
                     continue;
                 }
-                
-                var currentCount = 0;
+
+                var match = new AppaTypeFinderResult {matchType = type};
+                match.Initialize();
+
                 var fields = type.GetFields(
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
                 );
@@ -40,20 +44,20 @@ namespace Appalachia.Utility.Reflection
                 {
                     if (fieldNameHash.Contains(field.Name))
                     {
-                        currentCount += 1;
+                        match.fieldsMatched.Add(field.Name);
                     }
                 }
 
-                if (currentCount > bestMatchCount)
+                if (match.fieldsMatched.Count > 0)
                 {
-                    fieldCount = fields.Length;
-                    bestMatch = type;
-                    bestMatchCount = currentCount;
+                    match.likelihood = match.fieldsMatched.Count / (float) fieldCount;
+                    matches.Add(match);
                 }
             }
 
-            likelihood = bestMatchCount / (float) fieldCount;
-            return bestMatch;
+            matches.Sort((a, b) => a.likelihood.CompareTo(b.likelihood));
+
+            return matches;
         }
     }
 }

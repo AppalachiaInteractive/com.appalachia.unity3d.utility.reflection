@@ -388,7 +388,7 @@ namespace Appalachia.Utility.Reflection
                        );
             if (memberInfo != null)
             {
-                var str = memberInfo.IsStatic() ? "Static " : "Non-static ";
+                var str = memberInfo.IsStatic_CACHE() ? "Static " : "Non-static ";
                 if (flag1 &&
                     memberInfo is MethodInfo &&
                     ((uint) (memberInfo as MethodInfo).GetParameters().Length > 0U))
