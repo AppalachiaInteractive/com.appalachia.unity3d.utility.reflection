@@ -9,9 +9,6 @@ namespace Appalachia.Utility.Reflection.Extensions
     public static partial class ReflectionExtensions
     {
 
-        private static readonly ProfilerMarker _PRF_GetAttributesCachedInternal =
-            new(_PRF_PFX + nameof(GetAttributesCached_INTERNAL));
-
         private static readonly ProfilerMarker _PRF_GetAttributeCached =
             new(_PRF_PFX + nameof(GetAttribute_CACHE));
 
@@ -27,10 +24,11 @@ namespace Appalachia.Utility.Reflection.Extensions
         private static readonly ProfilerMarker _PRF_WithAttribute =
             new(_PRF_PFX + nameof(WithAttribute));
 
+        private static readonly ProfilerMarker _PRF_GetAttributesCached_INTERNAL = new ProfilerMarker(_PRF_PFX + nameof(GetAttributesCached_INTERNAL));
         private static T[] GetAttributesCached_INTERNAL<T>(this MemberInfo memberType, bool inherit)
             where T : Attribute
         {
-            using (_PRF_GetAttributesCachedInternal.Auto())
+            using (_PRF_GetAttributesCached_INTERNAL.Auto())
             {
                 var targetType = typeof(T);
                 

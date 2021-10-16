@@ -236,6 +236,7 @@ namespace Appalachia.Utility.Reflection
             return false;
         }
 
+        // ReSharper disable once FunctionComplexityOverflow
         public bool TryGetMembers(out MemberInfo[] memberInfos, out string errorMessage)
         {
             var source1 = Enumerable.Empty<MemberInfo>();
@@ -346,21 +347,21 @@ namespace Appalachia.Utility.Reflection
 
             if (this.returnType != null)
             {
-                Type returnType;
+                Type rt;
 
                 source1 = !returnTypeCanBeConverted
                     ? !returnTypeCanInherit
                         ? source1.Where(
-                            x => ((returnType = x.GetReturnType()) != null) &&
-                                 (returnType == this.returnType)
+                            x => ((rt = x.GetReturnType()) != null) &&
+                                 (rt == this.returnType)
                         )
                         : source1.Where(
-                            x => ((returnType = x.GetReturnType()) != null) &&
-                                 returnType.InheritsFrom(this.returnType)
+                            x => ((rt = x.GetReturnType()) != null) &&
+                                 rt.InheritsFrom(this.returnType)
                         )
                     : source1.Where(
-                        x => ((returnType = x.GetReturnType()) != null) &&
-                             ConvertUtility.CanConvert(returnType, this.returnType)
+                        x => ((rt = x.GetReturnType()) != null) &&
+                             ConvertUtility.CanConvert(rt, this.returnType)
                     );
             }
 

@@ -68,8 +68,8 @@ namespace Appalachia.Utility.Reflection.Extensions
         private static object READABLE_NAME_CACHE_LOCK = new();
         private static Dictionary<Type, string> READABLE_NAMES_CACHE = new();
         
-        private static bool _initializingCaches = false;
-        private static bool _initializedCaches = false;
+        private static bool _initializingCaches;
+        private static bool _initializedCaches;
 
         private static readonly ProfilerMarker _PRF_InitializeCaches = new ProfilerMarker(_PRF_PFX + nameof(InitializeCaches));
         
